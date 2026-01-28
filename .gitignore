@@ -1,0 +1,46 @@
+# Envs / python
+.venv/
+__pycache__/
+*.pyc
+
+# VS Code / server junk
+.vscode-server/
+.vscode/
+.cache/
+.dotnet/
+.wget-hsts
+
+# Shell / home files (just in case)
+.bash_history
+.bashrc
+.bash_logout
+.profile
+.python-version
+.ssh/
+
+# Secrets
+openai_key
+.env
+*.key
+
+# Logs and runtime outputs
+*.log
+logs_*
+app_error*
+app_output*
+app_v2_error*
+app_v2_output*
+hypergraphrag*.log
+
+# Stuff you said you don't want pushed
+app.py
+app_v2.py
+expr/
+index.html
+scChat/
+static_v2/
+
+# Big generated eval outputs (recommended)
+evaluation/results/
+expr/
+
