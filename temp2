@@ -1,0 +1,23 @@
+I do not want very generic answers. You also must seperately indicate the genes/reactions/metabolites/compounds, relations you used from the metabolic context and critically indicate what did learn as new information that you did not extract before looking at the reactions and metabolic context data to answer the user's question.
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:hypergraphrag:kw_prompt result:
+("hyper-relation"<|>"Summarize the experimental and clinical evidence that links the oncometabolite 2-hydroxyglutarate (2-HG) to glioma initiation, progression, and prognosis."<|>9)##
+("entity"<|>"2-hydroxyglutarate"<|>"metabolite"<|>"2-hydroxyglutarate (2-HG) is an oncometabolite linked to glioma initiation and progression, affecting epigenetic regulation and tumor growth."<|>95)##
+("entity"<|>"glioma"<|>"disease"<|>"Gliomas are brain tumors associated with mutations leading to changes in metabolism, particularly relating to 2-hydroxyglutarate."<|>90)##
+("hyper-relation"<|>"In addition, explain the roles of the genes AML and treh in this context."<|>8)##
+("entity"<|>"AML"<|>"gene"<|>"AML can refer to acute myeloid leukemia–associated genes that may include IDH1/IDH2 or other driver genes involved in tumorigenesis."<|>85)##
+("entity"<|>"treh"<|>"gene"<|>"Treh refers to the trehalase gene (TREH), which is involved in carbohydrate metabolism and could interact with 2-hydroxyglutarate pathways."<|>85)##
+("hyper-relation"<|>"clarify whether AML refers to acute myeloid leukemia–associated genes and whether treh refers to the trehalase gene."<|>8)##
+("hyper-relation"<|>"describe how these genes or pathways might mechanistically interact with 2-hydroxyglutarate metabolism or signaling in glioma."<|>9)##
+("entity"<|>"IDH1"<|>"gene"<|>"IDH1 is a gene involved in the metabolism of isocitrate to alpha-ketoglutarate and is frequently mutated in gliomas leading to the production of 2-hydroxyglutarate."<|>90)##
+("entity"<|>"IDH2"<|>"gene"<|>"IDH2 is another gene in the isocitrate dehydrogenase family that may also be mutated in gliomas, affecting metabolic pathways."<|>90)##
+("hyper-relation"<|>"This is the metabolite context, this is extracted from our well-curated database."<|>7)##
+("entity"<|>"metabolite context"<|>"context"<|>"The metabolite context provides insights into various metabolites and their interactions within glycolytic and metabolic pathways relevant to gliomas."<|>85)##
+("entity"<|>"TREH"<|>"gene"<|>"TREH is the gene encoding trehalase, which breaks down trehalose in the carbohydrate metabolism pathway and may interact with 2-HG pathways."<|>85)##
+("hyper-relation"<|>"Seeds used: ['TREH', 'IDH1', 'IDH2'...'<|>6)##
+("entity"<|>"seeds"<|>"concept"<|>"Seeds in this context refer to the various metabolic components used in analyzing reactions related to 2-HG and glioma pathology."<|>80)##
+("entity"<|>"subgraph size"<|>"data"<|>"The subgraph size indicating the number of nodes related to the metabolic processes involving glioma and 2-HG.<|>80)##
+("hyper-relation"<|>"Top reactions respect directionality and compartments; do not invent transport steps."<|>7)##
+("entity"<|>"top reactions"<|>"data"<|>"The top reactions include various metabolic conversions relevant to the pathways involving glioma and oncometabolites."<|>85)##
+("hyper-relation"<|>"Compartmentalization in shown set: c, e, g, l, m, n, r"<|>6)##
+("entity"<|>"compartments"<|>"concept"<|>"Compartments indicate the different cellular or organelle contexts where metabolic reactions take place relevant to glioma biology."<|>75)##

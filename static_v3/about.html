@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>About – Onco-Metabolite Knowledge HyperGraph AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/jpg" href="/static/hypernode-orb.jpg" />
+
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-elevated: #0b1020;
+      --bg-soft: #111827;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --accent-strong: #0ea5e9;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --danger: #f97373;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 50%, #020617 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      font-size: 16px;
+    }
+
+    .app-shell {
+      max-width: 2000px;
+      margin: 0 auto;
+      padding: 2.2rem 2rem 3.2rem;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2.4rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      background: conic-gradient(
+        from 160deg,
+        #22c55e,
+        #22c55e,
+        #38bdf8,
+        #6366f1,
+        #a855f7,
+        #22c55e
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 22px rgba(56, 189, 248, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-logo::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border-radius: inherit;
+      background: radial-gradient(circle at top, #020617, #020617 65%, #0f172a);
+    }
+
+    .brand-logo-initials {
+      position: relative;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+
+    .brand-text-main {
+      font-weight: 600;
+      font-size: 1.25rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .brand-text-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;   /* tight spacing between nav and pill */
+      justify-content: flex-end;  /* keeps both to the right */
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.6rem;   /* tighter spacing for Home, About, Team */
+    }
+
+    /* Nav: flat by default, pill only on hover.
+       About (primary) keeps the pill style. */
+    .nav-link {
+      font-size: 0.9rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 0;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      text-decoration: none;
+      background: transparent;
+      transition: background 0.12s, border-color 0.12s, color 0.12s, transform 0.08s, border-radius 0.12s;
+    }
+
+    .nav-link:hover {
+      background: rgba(17, 24, 39, 1);
+      border-color: var(--accent);
+      color: var(--text-main);
+      border-radius: 999px;
+      transform: translateY(-1px);
+    }
+
+    .nav-link.primary {
+      border-radius: 999px;
+      border-color: var(--accent-strong);
+      color: #e5e7eb;
+      background: linear-gradient(135deg, var(--accent-strong), #6366f1);
+      box-shadow: 0 12px 24px rgba(56, 189, 248, 0.35);
+    }
+
+    .nav-link.primary:hover {
+      box-shadow: 0 14px 30px rgba(56, 189, 248, 0.45);
+    }
+
+    /* Hero */
+
+    .hero {
+      margin-bottom: 2.2rem;
+      color: var(--accent);
+    }
+
+    .tagline {
+      font-size: 0.9rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title {
+      font-size: 2.05rem;
+      font-weight: 650;
+      margin-bottom: 0.9rem;
+      max-width: 160rem;
+    }
+
+    .hero-lead {
+      font-size: 1.08rem;
+      color: var(--text-muted);
+      max-width: 264rem;
+      line-height: 1.8;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 1.6rem;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-col-heading {
+      font-size: 1.6rem;
+      font-weight: 550;
+      margin-bottom: 0.45rem;
+    }
+
+    .hero-text {
+      font-size: 1.0rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+
+    .hero-text em {
+      color: var(--text-main);
+    }
+
+    /* Main grid */
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 1.8rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .panel {
+      background: linear-gradient(
+        145deg,
+        rgba(15, 23, 42, 0.98),
+        rgba(15, 23, 42, 0.9),
+        rgba(15, 23, 42, 0.98)
+      );
+      border-radius: 22px;
+      padding: 1.5rem 1.6rem 1.8rem;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(
+        circle at top left,
+        rgba(56, 189, 248, 0.12),
+        transparent 60%
+      );
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .panel-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel-heading {
+      font-size: 1.05rem;
+      color: var(--accent);
+      font-weight: 550;
+      margin-bottom: 0.45rem;
+    }
+
+    .panel-subtext {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    /* Stats cards */
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+      margin-top: 0.4rem;
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .stat-card {
+      border-radius: 16px;
+      padding: 0.9rem 1rem;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .stat-note {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* Pills */
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.65rem;
+    }
+
+    .pill {
+      font-size: 0.8rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-muted);
+    }
+
+    /* Pipeline steps */
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin: 0.6rem 0 0.4rem;
+      padding: 0;
+      list-style: none;
+    }
+
+    .step-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.55rem 0.8rem;
+      align-items: flex-start;
+    }
+
+    .step-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-top: 0.15rem;
+    }
+
+    .step-title {
+      font-size: 0.98rem;
+      font-weight: 500;
+      margin-bottom: 0.1rem;
+    }
+
+    .step-text {
+      font-size: 0.94rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .step-tagline {
+      font-size: 0.82rem;
+      color: var(--accent);
+      margin-top: 0.15rem;
+    }
+
+    /* Math / scoring */
+
+    .math-panel {
+      margin-top: 1.3rem;
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      font-size: 0.96rem;
+    }
+
+    .math-panel h3 {
+      font-size: 0.98rem;
+      margin: 0 0 0.3rem;
+    }
+
+    .math-panel p {
+      margin: 0.35rem 0;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .math-panel .math-block {
+      margin: 0.4rem 0;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      background: rgba(2, 6, 23, 0.9);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      overflow-x: auto;
+    }
+
+    /* KG vs GPT */
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1rem;
+      margin-top: 0.7rem;
+    }
+
+    @media (max-width: 800px) {
+      .compare-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .compare-card {
+      border-radius: 16px;
+      padding: 0.9rem 1rem;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+    }
+
+    .compare-title {
+      font-size: 0.98rem;
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+    }
+
+    .compare-list {
+      margin: 0;
+      padding-left: 1.1rem;
+      font-size: 0.94rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+
+    .header-pill {
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+    }
+
+    .header-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
+    }
+
+    .brand-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+  }
+
+
+
+  </style>
+
+  <!-- MathJax for professional equation rendering -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="brand">
+        <div class="brand-logo">
+          <div class="brand-logo-initials">KG</div>
+        </div>
+        <div>
+          <div class="brand-text-main">Onco-Metabolite Knowledge HyperGraph AI</div>
+          <div class="brand-text-sub">Powered by Knowledge-Graph RAG</div>
+        </div>
+      </div>
+      <div class="nav-wrapper">
+        <nav class="nav-links">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/about" class="nav-link primary">About</a>
+          <a href="https://www.bdrl.org" class="nav-link" target="_blank" rel="noopener">Our team</a>
+        </nav>
+
+        <div class="header-pill">
+          <span class="header-pill-dot"></span>
+          <span>Backed by 3M+ High-Impact & Cited Papers</span>
+        </div>
+      </div>
+
+    </header>
+
+    <section class="hero">
+      <!-- <div class="tagline">About this system</div> -->
+      <h1 class="hero">From millions of papers to a queryable metabolism–cancer Knowledge HyperGraph</h1>
+
+      <p class="hero-lead">
+        The <b>Onco-Metabolite Knowledge HyperGraph (GKHG) </b>is built to map the metabolic landscape of cancer with depth and clarity. 
+        It continuously ingests millions of full-text biomedical articles, evaluates them using a quantitative relevance model, and extracts complex, 
+        multi-entity relationships through Knowledge-Graph RAG.
+
+        The result isn't just data. It’s a living, queryable knowledge hypergraph where metabolites, pathways, genes, interventions and cancer 
+        phenotypes are explicitly connected. Every relationship is traceable to the original source and ranked by strength, context and biological relevance.
+
+        Researchers can explore metabolism-cancer mechanisms at scale, test hypotheses, surface hidden links and accelerate discovery in real time.
+      </p>
+
+      <div class="hero-grid">
+        <div>
+          <h2 class="hero-col-heading">What problem it solves:</h2>
+          <p class="hero-text">
+            Biomedical knowledge is scattered across millions of unstructured articles. Critical relationships - like
+            how a nutrient shapes a metabolic pathway that drives tumor behavior - are buried in prose and rarely
+            modeled in a way that can be queried or recombined.
+          </p>
+          <p class="hero-text" style="margin-top:0.7rem;">
+            Most AI tools can summarize research, but they lose the logic behind the connections. You get answers, 
+            but not understanding. GKHG is built to fix that. It turns scientific literature into a structured, explainable knowledge graph where relationships between genes, 
+            drugs, diseases, mechanisms and outcomes stay explicit, traceable and reusable.
+            <br>
+            Researchers can ask precise questions, explore pathways, validate mechanisms and generate new hypotheses with transparency. 
+            Every insight is backed by sources, so you can see not just what the model says, but why.
+            <br>
+            GKHG enables literature computable and actionable. It turns buried knowledge into decision-ready insight for translational oncology and beyond.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="hero-col-heading">What is the underlying system:</h2>
+          <p class="hero-text">
+            At its core, GKHG is a <em>generalized knowledge hypergraph</em> for metabolism and cancer. Biological
+            entities - genes, metabolites, nutrients, pathways, diseases, drugs and signaling processes - are modeled
+            as nodes. 
+            <br>
+            Evidence sentences from the literature become hyperedges that connect multiple entities at once
+            (for example, a metabolite, a gene, a pathway and a cancer subtype in a single mechanistic statement).
+          </p>
+          <p class="hero-text" style="margin-top:0.7rem;">
+            Each hyperedge keeps its original text, metadata and vector representation. This allows the system to
+            support both graph-structured reasoning and traditional embedding-based retrieval, while always anchoring
+            answers in concrete experimental evidence.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <!-- LEFT: Data + Pipeline -->
+      <section class="panel">
+        <div class="panel-inner">
+          <h2 class="panel-heading">Literature backbone</h2>
+          <p class="panel-subtext">
+            The system combines full-text biomedical literature with rich citation metadata, then aggressively filters
+            for metabolism–cancer–nutrient biology before building the hypergraph.
+          </p>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">PMC full-text</div>
+              <div class="stat-value">7M</div>
+              <div class="stat-note">Articles (excluding manuscripts)</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">OpenAlex</div>
+              <div class="stat-value">40M</div>
+              <div class="stat-note">Papers with citation metadata</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Aligned corpus</div>
+              <div class="stat-value">6.6M</div>
+              <div class="stat-note">PMC ↔ OpenAlex matched full-texts</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Curated subset</div>
+              <div class="stat-value">5.5M</div>
+              <div class="stat-note">
+                Curated papers containing ≥1 cancer and metabolism-focused keyword (~3,400 terms)
+              </div>
+            </div>
+          </div>
+
+          <div class="pill-row">
+            <span class="pill">Curated vocabulary (~3.4k terms + synonyms)</span>
+            <span class="pill">Entity and hyperedge embeddings</span>
+            <span class="pill">Multi-entity mechanistic relations</span>
+          </div>
+
+          <h2 class="panel-heading" style="margin-top:1.7rem;">HyperGraph workflow</h2>
+          <ul class="steps-list">
+            <li class="step-item">
+              <div class="step-badge">1</div>
+              <div>
+                <div class="step-title">Ingest</div>
+                <div class="step-text">
+                  Pull full-text XML/HTML from PMC and metadata from OpenAlex. Align papers across the two
+                  sources to obtain both content and citation context for each article.
+                </div>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-badge">2</div>
+              <div>
+                <div class="step-title">Filter and refine</div>
+                <div class="step-text">
+                  Apply hard and fuzzy matching using a metabolism–cancer term list. Compute relevance scores
+                  (see right) and drop low-quality or off-topic papers.
+                </div>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-badge">3</div>
+              <div>
+                <div class="step-title">Extract (Knowledge-Graph RAG)</div>
+                <div class="step-text">
+                  For each chunk, Knowledge-Graph RAG extracts entities (metabolites, cancers, pathways, conditions),
+                  hyperedges (multi-entity statements), natural-language descriptions and vector embeddings.
+                </div>
+                <div class="step-tagline">Each hyperedge is one evidence sentence connecting multiple entities.</div>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-badge">4</div>
+              <div>
+                <div class="step-title">Build GKHG</div>
+                <div class="step-text">
+                  Construct a bipartite graph with entity nodes on one side and hyperedge nodes on the other.
+                  Store text, metadata and embeddings for both, enabling graph search and vector retrieval.
+                </div>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-badge">5</div>
+              <div>
+                <div class="step-title">Query and reasoning</div>
+                <div class="step-text">
+                  Embed the user query, retrieve nearest entities, follow their incident hyperedges and aggregate
+                  the most relevant evidence sets before passing them to the language model.
+                </div>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-badge">6</div>
+              <div>
+                <div class="step-title">Answer construction and validation</div>
+                <div class="step-text">
+                  The language model synthesizes an answer grounded in the retrieved entities and hyperedges.
+                  Responses can then be inspected, re-weighted by relevance and subjected to biological sanity checks.
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- RIGHT: Scoring + KG vs GPT -->
+      <section class="panel">
+        <div class="panel-inner">
+          <h2 class="panel-heading">Relevance scoring at scale</h2>
+          <p class="panel-subtext">
+            Every paper receives a continuous relevance score that combines text match, citation impact,
+            recency and journal prestige. Each component is mapped to a 0–1 quantile rank, making the
+            score robust to extreme outliers.
+          </p>
+
+          <div class="math-panel">
+            <h3>Text signal (35%)</h3>
+            <p>Section-aware boosting and local keyword density:</p>
+            <div class="math-block">
+              \[
+                T_{1} = \mathrm{qrank}_{01}(\text{section boost}), \quad
+                T_{2} = \mathrm{qrank}_{01}(\text{density per 1000 words})
+              \]
+              \[
+                \text{text signal} = 0.8\,T_{1} + 0.2\,T_{2}
+              \]
+            </div>
+
+            <h3>Citation signal (35%)</h3>
+            <p>Log-transform citation counts before ranking:</p>
+            <div class="math-block">
+              \[
+                C = \log\bigl(1 + \text{citation count}\bigr)
+              \]
+              \[
+                \text{citation signal} = \mathrm{qrank}_{01}(C)
+              \]
+            </div>
+
+            <h3>Recency signal (15%)</h3>
+            <p>Down-weight very old work while clipping extremes:</p>
+            <div class="math-block">
+              \[
+                R = \mathrm{clip}\bigl(\text{publication year} - \text{baseline year}, -10, 10\bigr)
+              \]
+              \[
+                \text{recency signal} = \mathrm{qrank}_{01}(R)
+              \]
+            </div>
+
+            <h3>Journal prestige signal (15%)</h3>
+            <p>Blend multiple journal-level indicators:</p>
+            <div class="math-block">
+              \[
+                J =
+                0.55\,\mathrm{qrank}_{01}(\text{SJR index}) +
+                0.20\,\mathrm{qrank}_{01}(\text{cites per document (2y)}) +
+                0.15\,\mathrm{qrank}_{01}(\text{citescore}) +
+                0.10\,\mathrm{qrank}_{01}(\text{journal h-index})
+              \]
+              \[
+                \text{journal prestige signal} = \mathrm{qrank}_{01}(J)
+              \]
+            </div>
+
+            <h3>Final relevance score</h3>
+            <div class="math-block">
+              \[
+                \text{final score} =
+                0.35\,\text{text signal} +
+                0.35\,\text{citation signal} +
+                0.15\,\text{recency signal} +
+                0.15\,\text{journal prestige signal}
+              \]
+            </div>
+
+            <p>
+              Here, \(\mathrm{qrank}_{01}(\cdot)\) maps each metric to its empirical quantile rank in \([0,1]\),
+              so different signals become comparable and resistant to a few extremely cited or extremely recent papers.
+            </p>
+          </div>
+
+          <h2 class="panel-heading" style="margin-top:1.5rem;">Why KG + RAG instead of GPT-only?</h2>
+          <p class="panel-subtext">
+            Large biomedical language models are excellent readers, but they don’t maintain a stable,
+            queryable memory of millions of mechanistic claims. The hypergraph acts as that structured
+            memory layer.
+          </p>
+
+          <div class="compare-grid">
+            <div class="compare-card">
+              <div class="compare-title">LLM-only (GPT-style)</div>
+              <ul class="compare-list">
+                <li>Strong local synthesis, but no explicit global graph.</li>
+                <li>Can hallucinate multi-step mechanisms and interactions.</li>
+                <li>Hard to see which studies and pathways are actually driving an answer.</li>
+                <li>No direct way to trace metabolite → gene → pathway → condition chains.</li>
+              </ul>
+            </div>
+            <div class="compare-card">
+              <div class="compare-title">Knowledge-Graph RAG + GPT <i>(ours)</i></div>
+              <ul class="compare-list">
+                <li>Entities and hyperedges come from explicit sentences in specific papers.</li>
+                <li>Multi-way relations (drug, gene, pathway, nutrient, condition) are preserved as hyperedges.</li>
+                <li>Every answer can be traced back to concrete evidence and literature sources.</li>
+                <li>Graph structure enforces factual grounding and makes the reasoning path inspectable.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="pill-row" style="margin-top:0.9rem;">
+            <span class="pill">Multi-entity reasoning</span>
+            <span class="pill">Explicit evidence sentences</span>
+            <span class="pill">Traceable biological mechanisms</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

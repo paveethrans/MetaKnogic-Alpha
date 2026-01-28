@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Methodology | Cancer-Metabolite AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/jpg" href="/static/hypernode-orb.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      /* Theme: Dark Obsidian */
+      --bg-app: #020617;       
+      --bg-panel: #0f172a;     
+      --bg-card: #1e293b;
+
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.15);
+      
+      --accent: #22d3ee;       /* Cyan */
+      --accent-glow: rgba(34, 211, 238, 0.15);
+      --accent-secondary: #818cf8; /* Indigo */
+      
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-invert: #020617;
+      
+      --font-main: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    html[data-theme="light"] {
+      --bg-app: #f8fafc;
+      --bg-panel: #ffffff;
+      --bg-card: #ffffff;
+
+      --border: rgba(2, 6, 23, 0.10);
+      --border-hover: rgba(2, 6, 23, 0.18);
+
+      --accent: #0891b2;
+      --accent-glow: rgba(8, 145, 178, 0.15);
+      --accent-secondary: #7c3aed;
+
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-invert: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-app); }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    body {
+      margin: 0; padding: 0;
+      font-family: var(--font-main);
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* --- Navigation --- */
+    header {
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 50;
+      padding: 0 2rem; height: 70px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    html[data-theme="light"] header { background: rgba(248, 250, 252, 0.85); }
+
+    .brand { display: flex; align-items: center; gap: 1rem; }
+
+    .brand-logo {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      display: block;
+      object-fit: cover;
+      box-shadow: 0 0 15px var(--accent-glow);
+      letter-spacing: -0.5px;
+    }
+    html[data-theme="light"] .brand-logo { background: rgba(2,6,23,0.03); }
+
+    .brand-text { font-weight: 700; font-size: 1rem; letter-spacing: -0.01em; color: #fff; }
+    html[data-theme="light"] .brand-text { color: var(--text-main); }
+
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+
+    .nav-link {
+      text-decoration: none; color: var(--text-muted); font-size: 0.9rem;
+      transition: color 0.2s; font-weight: 500;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--accent); }
+    
+    .theme-toggle-btn {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-radius: 999px;
+      padding: 6px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    html[data-theme="light"] .theme-toggle-btn { background: rgba(2,6,23,0.03); }
+    .theme-toggle-btn:hover { color: var(--text-main); border-color: var(--accent); }
+    
+    .header-badge {
+      font-size: 0.75rem; background: rgba(255,255,255,0.05); 
+      border: 1px solid var(--border); padding: 4px 12px; border-radius: 99px;
+      color: var(--text-muted);
+    }
+
+    /* --- Layout --- */
+    .container { max-width: 1400px; margin: 0 auto; padding: 3rem 2rem; }
+
+    /* --- Hero --- */
+    .hero { margin-bottom: 4rem; }
+    .hero h1 {
+      font-size: 2.5rem; font-weight: 700; margin-bottom: 1.5rem;
+      background: linear-gradient(to right, #fff, #94a3b8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: -0.03em; line-height: 1.2;
+    }
+    html[data-theme="light"] .hero h1 {
+      background: linear-gradient(to right, #0f172a, #475569);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-lead {
+      font-size: 1.1rem; color: var(--text-muted); line-height: 1.7;
+      max-width: 900px; margin-bottom: 2rem;
+    }
+    
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem;
+    }
+    .hero-col h2 {
+      font-size: 1.25rem; color: var(--accent); margin-bottom: 1rem; font-weight: 600;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .hero-text { font-size: 0.95rem; line-height: 1.7; color: var(--text-muted); }
+
+    /* --- Main Grid --- */
+    .main-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; }
+
+    /* --- Panel Styles --- */
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative; overflow: hidden;
+    }
+    .panel::after {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+    .panel-title {
+      font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 1rem;
+      border-left: 3px solid var(--accent); padding-left: 1rem;
+    }
+    html[data-theme="light"] .panel-title { color: var(--text-main); }
+    .panel-desc { margin-bottom: 2rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* --- Stats --- */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--bg-card); padding: 1.2rem; border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .stat-val { font-size: 1.5rem; font-weight: 700; color: var(--accent); margin: 0.2rem 0; }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .stat-sub { font-size: 0.75rem; color: #64748b; margin-top: 0.5rem; }
+
+    /* --- Workflow List --- */
+    .step-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.5rem; }
+    .step-item { display: flex; gap: 1rem; }
+    .step-num {
+      width: 28px; height: 28px; background: rgba(34, 211, 238, 0.1);
+      border: 1px solid var(--accent); color: var(--accent);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+    }
+    .step-content h4 { margin: 0 0 0.3rem 0; color: #fff; font-size: 0.95rem; }
+    html[data-theme="light"] .step-content h4 { color: var(--text-main); }
+    .step-content p { margin: 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* --- Math Blocks (Restored) --- */
+    .math-card {
+      background: var(--bg-card); border-radius: 12px; padding: 1.5rem;
+      border: 1px solid var(--border); margin-top: 1.5rem;
+    }
+    .math-section { margin-bottom: 2rem; }
+    .math-section:last-child { margin-bottom: 0; }
+    
+    .math-title { font-size: 0.9rem; color: var(--accent-secondary); margin-bottom: 0.5rem; font-weight: 600; }
+    
+    .math-block {
+      background: #020617; padding: 1rem; border-radius: 8px; 
+      border: 1px solid var(--border); overflow-x: auto;
+      font-size: 0.9rem;
+    }
+    html[data-theme="light"] .math-block { background: rgba(2,6,23,0.03); }
+    .math-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+
+    /* --- Comparison --- */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    .compare-card { background: var(--bg-card); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); }
+    .compare-card h5 { margin: 0 0 0.5rem 0; color: #fff; font-size: 0.9rem; }
+    html[data-theme="light"] .compare-card h5 { color: var(--text-main); }
+    .compare-list { padding-left: 1.2rem; margin: 0; color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+
+    @media (max-width: 900px) {
+      .hero-grid, .main-grid, .stats-grid, .compare-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+
+<body>
+
+  <header>
+    <div class="brand">
+      <img class="brand-logo cmh-logo" src="/static_v3/CMH-AI-darkmode-notext.jpg" data-dark-src="/static_v3/CMH-AI-darkmode-notext.jpg" data-light-src="/static_v3/CMH-AI-lightmode-notext.jpg" alt="CMH-AI" />
+      <div class="brand-text">Cancer-Metabolite AI</div>
+    </div>
+    
+    <nav class="nav-links">
+      <a href="/" class="nav-link">Workspace</a>
+      <a href="/about" class="nav-link active">Methodology</a>
+      <a href="https://www.bdrl.org" target="_blank" class="nav-link">Lab Team</a>
+      <button class="theme-toggle-btn" id="theme-toggle" type="button" title="Toggle light/dark mode">
+        <i class="fa-regular fa-moon" id="theme-icon"></i>
+        <span id="theme-pill">Dark</span>
+      </button>
+      <span class="header-badge">v2.1 HyperGraph</span>
+    </nav>
+  </header>
+
+  <div class="container">
+    
+    <section class="hero">
+      <h1>Knowledge HyperGraph Architecture</h1>
+      <p class="hero-lead">
+        The <b>Onco-Metabolite Knowledge HyperGraph (GKHG)</b> maps the metabolic landscape of cancer. 
+        It ingests millions of full-text articles, evaluates them via a rigorous relevance model, and extracts complex 
+        relationships using Knowledge-Graph RAG.
+      </p>
+
+      
+
+      <div class="hero-grid">
+        <div class="hero-col">
+          <h2><i class="fa-solid fa-puzzle-piece"></i> The Problem</h2>
+          <p class="hero-text">
+            Biomedical knowledge is scattered across millions of unstructured articles. 
+            Critical relationships—like how a nutrient shapes a metabolic pathway driving tumor behavior—are buried in prose.
+            Standard vector search often misses the explicit logic connecting these entities.
+          </p>
+        </div>
+        <div class="hero-col">
+          <h2><i class="fa-solid fa-diagram-project"></i> Our Solution</h2>
+          <p class="hero-text">
+            We model biological entities as nodes and evidence sentences as <b>Hyperedges</b>. 
+            Unlike standard KGs that link only two items, our hyperedges connect multiple entities (e.g., Gene + Metabolite + Cancer Subtype) 
+            simultaneously, preserving the full scientific context.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="main-grid">
+      
+      <section class="panel">
+        <div class="panel-title">Data Pipeline</div>
+        <p class="panel-desc">
+          We combine PMC full-texts with OpenAlex metadata, filtering for high-impact oncology/metabolism research.
+        </p>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Full-Text Corpus</div>
+            <div class="stat-val">7M+</div>
+            <div class="stat-sub">PMC Articles</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Citation Metadata</div>
+            <div class="stat-val">40M+</div>
+            <div class="stat-sub">OpenAlex Records</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Aligned & Filtered</div>
+            <div class="stat-val">6.6M</div>
+            <div class="stat-sub">Relevance Matched</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Curated Vocab</div>
+            <div class="stat-val">3,400+</div>
+            <div class="stat-sub">Metabolites & Genes</div>
+          </div>
+        </div>
+
+        <h3 style="color:#fff; font-size:1rem; margin: 2rem 0 1rem;">End-to-End Workflow</h3>
+        
+        
+
+        <ul class="step-list" style="margin-top: 1.5rem;">
+          <li class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Ingest & Align</h4>
+              <p>Pull XML from PMC and align with OpenAlex citation metrics.</p>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Relevance Filtering</h4>
+              <p>Score papers based on keyword density, impact factor, and recency.</p>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>KG-RAG Extraction</h4>
+              <p>Extract entities and hyperedges using LLMs. Each hyperedge is a verified claim.</p>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4>Graph Construction</h4>
+              <p>Build a bipartite graph (Entity Nodes ↔ Evidence Nodes) in Neo4j.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">Relevance Scoring Algorithm</div>
+        <p class="panel-desc">
+          Every paper receives a continuous relevance score to prioritize high-quality, impactful science.
+          Each component is mapped to a 0–1 quantile rank (`qrank`).
+        </p>
+
+        <div class="math-card">
+          
+          <div class="math-section">
+            <div class="math-title">1. Text Signal (35%)</div>
+            <div class="math-desc">Section-aware boosting and local keyword density.</div>
+            <div class="math-block">
+              \[
+                T_{1} = \mathrm{qrank}(\text{Section Boost}) \\
+                T_{2} = \mathrm{qrank}(\text{Density per 1k words}) \\
+                \text{Text Signal} = 0.8 \cdot T_{1} + 0.2 \cdot T_{2}
+              \]
+            </div>
+          </div>
+
+          <div class="math-section">
+            <div class="math-title">2. Citation Signal (35%)</div>
+            <div class="math-desc">Log-transformed citation counts to normalize outliers.</div>
+            <div class="math-block">
+              \[
+                C = \log(1 + \text{Citation Count}) \\
+                \text{Citation Signal} = \mathrm{qrank}(C)
+              \]
+            </div>
+          </div>
+
+          <div class="math-section">
+            <div class="math-title">3. Recency Signal (15%)</div>
+            <div class="math-desc">Down-weights older work while clipping extremes.</div>
+            <div class="math-block">
+              \[
+                R = \mathrm{clip}(\text{Pub Year} - \text{Baseline}, -10, 10) \\
+                \text{Recency Signal} = \mathrm{qrank}(R)
+              \]
+            </div>
+          </div>
+
+          <div class="math-section">
+            <div class="math-title">4. Journal Prestige (15%)</div>
+            <div class="math-desc">A blended score of multiple impact metrics.</div>
+            <div class="math-block">
+              \[
+                J = 0.55 \cdot \mathrm{qrank}(\text{SJR}) \\
+                + \; 0.20 \cdot \mathrm{qrank}(\text{Cites/Doc}) \\
+                + \; 0.15 \cdot \mathrm{qrank}(\text{CiteScore}) \\
+                + \; 0.10 \cdot \mathrm{qrank}(\text{H-index})
+              \]
+            </div>
+          </div>
+
+          <div class="math-section" style="border-top:1px solid var(--border); padding-top:1.5rem">
+            <div class="math-title" style="color:var(--accent);">Final Relevance Score</div>
+            <div class="math-block" style="border-color:var(--accent);">
+              \[
+                \text{Score} = 0.35T + 0.35C + 0.15R + 0.15J
+              \]
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-title" style="margin-top: 3rem;">Why KG-RAG?</div>
+        
+        
+        <div class="compare-grid">
+          <div class="compare-card">
+            <h5 style="color:#f87171"><i class="fa-solid fa-xmark"></i> Standard LLM</h5>
+            <ul class="compare-list">
+              <li>Hallucinates links</li>
+              <li>Loses citations</li>
+              <li>Black-box reasoning</li>
+            </ul>
+          </div>
+          <div class="compare-card" style="border-color:var(--accent)">
+            <h5 style="color:var(--accent)"><i class="fa-solid fa-check"></i> KG-RAG (Ours)</h5>
+            <ul class="compare-list">
+              <li>Grounded evidence</li>
+              <li>Traceable Hyperedges</li>
+              <li>Graph-based logic</li>
+            </ul>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const THEME_KEY = "cm_theme_v1";
+    const themeToggleBtn = document.getElementById("theme-toggle");
+    const themeIcon = document.getElementById("theme-icon");
+    const themePill = document.getElementById("theme-pill");
+
+    function loadTheme() {
+      try {
+        const v = localStorage.getItem(THEME_KEY);
+        return v === "dark" ? "dark" : "light";
+      } catch {
+        return "light";
+      }
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme === "light" ? "light" : "dark";
+      try { localStorage.setItem(THEME_KEY, theme); } catch {}
+      updateThemeToggleUI();
+      updateLogoAssets();
+    }
+
+    function updateThemeToggleUI() {
+      if (!themePill || !themeIcon) return;
+      const isLight = document.documentElement.dataset.theme === "light";
+      themePill.textContent = isLight ? "Light" : "Dark";
+      themeIcon.className = isLight ? "fa-regular fa-sun" : "fa-regular fa-moon";
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.dataset.theme === "light" ? "light" : "dark";
+      applyTheme(current === "light" ? "dark" : "light");
+    }
+
+    function updateLogoAssets() {
+      const isLight = document.documentElement.dataset.theme === "light";
+      document.querySelectorAll("img.cmh-logo").forEach((img) => {
+        const lightSrc = img.getAttribute("data-light-src");
+        const darkSrc = img.getAttribute("data-dark-src");
+        const next = isLight ? lightSrc : darkSrc;
+        if (next && img.getAttribute("src") !== next) img.setAttribute("src", next);
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      applyTheme(loadTheme());
+      if (themeToggleBtn) themeToggleBtn.addEventListener("click", toggleTheme);
+    });
+  </script>
+
+</body>
+</html>

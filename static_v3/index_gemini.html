@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cancer-Metabolite AI | Knowledge HyperGraph</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/jpg" href="/static/hypernode-orb.jpg" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.plot.ly/plotly-2.34.0.min.js"></script>
+
+	  <style>
+	    :root {
+	      /* Palette: Dark Obsidian & Slate */
+	      --bg-app: #020617;       
+	      --bg-sidebar: #0f172a;     
+	      --bg-input: #1e293b;
+	      --bg-card: #0f172a;
+	      
+	      --border: rgba(255, 255, 255, 0.08);
+	      --border-strong: rgba(255, 255, 255, 0.15);
+	      
+	      --accent: #22d3ee;       /* Cyan */
+	      --accent-glow: rgba(34, 211, 238, 0.15);
+	      --accent-purple: #a855f7;
+	      
+	      --text-main: #f1f5f9;
+	      --text-muted: #94a3b8;
+	      --text-invert: #020617;
+	      
+	      --shadow-lg: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+	      --font-main: 'Inter', sans-serif;
+	      --font-mono: 'JetBrains Mono', monospace;
+	    }
+
+	    html[data-theme="light"] {
+	      --bg-app: #f8fafc;
+	      --bg-sidebar: #ffffff;
+	      --bg-input: #ffffff;
+	      --bg-card: #ffffff;
+
+	      --border: rgba(2, 6, 23, 0.10);
+	      --border-strong: rgba(2, 6, 23, 0.18);
+
+	      --accent: #0891b2;
+	      --accent-glow: rgba(8, 145, 178, 0.15);
+	      --accent-purple: #7c3aed;
+
+	      --text-main: #0f172a;
+	      --text-muted: #475569;
+	      --text-invert: #ffffff;
+
+	      --shadow-lg: 0 10px 30px -5px rgba(2, 6, 23, 0.12);
+	    }
+
+	    * { box-sizing: border-box; }
+
+    /* Custom Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-app);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 5px;
+      border: 2px solid var(--bg-app); /* Creates padding effect */
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    body {
+      margin: 0; padding: 0;
+      font-family: var(--font-main);
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+    }
+
+    /* --- LEFT SIDEBAR --- */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+
+    .brand-header {
+      padding: 1.25rem;
+      display: flex; align-items: center; gap: 0.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+	    .brand-logo {
+	      width: 32px; height: 32px;
+	      border-radius: 8px;
+	      border: 1px solid var(--border);
+	      background: rgba(255,255,255,0.02);
+	      display: block;
+	      object-fit: cover;
+	      box-shadow: 0 0 15px var(--accent-glow);
+	    }
+	    html[data-theme="light"] .brand-logo { background: rgba(2,6,23,0.03); }
+
+	    .brand-text { font-weight: 700; font-size: 0.95rem; color: #fff; }
+	    html[data-theme="light"] .brand-text { color: var(--text-main); }
+
+    .new-chat-btn {
+      margin: 1rem;
+      padding: 0.8rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.9rem; transition: all 0.2s;
+    }
+    .new-chat-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--accent); }
+
+    .history-container {
+      flex: 1; overflow-y: auto;
+      padding: 0 0.5rem;
+    }
+    
+    .history-label {
+      padding: 0 0.5rem 0.5rem;
+      font-size: 0.75rem; font-weight: 600;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    .history-item {
+      padding: 0.7rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem; color: var(--text-muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: all 0.2s;
+      margin-bottom: 2px;
+    }
+	    .history-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+	    .history-item.active { background: rgba(34, 211, 238, 0.1); color: var(--accent); }
+	    html[data-theme="light"] .history-item:hover { background: rgba(2,6,23,0.04); color: var(--text-main); }
+
+	    .sidebar-footer {
+	      padding: 1rem; border-top: 1px solid var(--border);
+	      display: flex; flex-direction: column; gap: 0.8rem;
+	    }
+	    .nav-link {
+	      text-decoration: none; color: var(--text-muted); font-size: 0.85rem;
+	      display: flex; align-items: center; gap: 0.6rem; transition: color 0.2s;
+	    }
+	    .nav-link:hover { color: var(--accent); }
+	    .theme-toggle-btn {
+	      border: 1px solid var(--border);
+	      background: rgba(255,255,255,0.02);
+	      color: var(--text-muted);
+	      font-size: 0.85rem;
+	      border-radius: 10px;
+	      padding: 0.55rem 0.75rem;
+	      cursor: pointer;
+	      display: inline-flex;
+	      align-items: center;
+	      justify-content: space-between;
+	      gap: 0.6rem;
+	      transition: all 0.2s;
+	      width: 100%;
+	    }
+	    html[data-theme="light"] .theme-toggle-btn { background: rgba(2,6,23,0.03); }
+	    .theme-toggle-btn:hover { color: var(--text-main); border-color: var(--accent); }
+	    .theme-toggle-btn .pill {
+	      font-size: 0.75rem;
+	      border: 1px solid var(--border);
+	      padding: 3px 8px;
+	      border-radius: 999px;
+	      color: var(--text-muted);
+	      flex-shrink: 0;
+	    }
+
+	    /* --- MAIN CHAT AREA --- */
+    .main-view {
+      flex: 1;
+      display: flex; flex-direction: column;
+      position: relative;
+      background: var(--bg-app);
+      /* Keep the chat area meaningfully wider than the graph on laptop screens */
+      min-width: 640px;
+    }
+
+	    .top-bar {
+	      height: 60px;
+	      padding: 0 2rem;
+	      display: flex; align-items: center; justify-content: space-between;
+	      border-bottom: 1px solid var(--border);
+	      background: rgba(2, 6, 23, 0.85);
+	      backdrop-filter: blur(12px);
+	      z-index: 10;
+	    }
+	    html[data-theme="light"] .top-bar { background: rgba(248, 250, 252, 0.85); }
+
+	    .status-badge {
+	      font-size: 0.75rem;
+	      background: rgba(34, 211, 238, 0.08);
+	      color: var(--accent);
+	      padding: 4px 10px; border-radius: 99px;
+	      border: 1px solid rgba(34, 211, 238, 0.2);
+	      display: flex; align-items: center; gap: 6px; font-weight: 500;
+	    }
+	    .status-badge.muted {
+	      background: rgba(255,255,255,0.04);
+	      border-color: var(--border);
+	      color: var(--text-muted);
+	    }
+	    html[data-theme="light"] .status-badge.muted { background: rgba(2,6,23,0.03); }
+	    .status-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 6px var(--accent); }
+	    .top-badges { display: flex; align-items: center; gap: 10px; }
+
+    /* Chat Scroll */
+    .chat-scroll {
+      flex: 1; overflow-y: auto;
+      scroll-behavior: smooth;
+      padding: 0;
+      display: flex; flex-direction: column;
+      align-items: center;
+    }
+
+    /* WIDER CONTAINER: Increased max-width */
+    .chat-inner-container {
+      width: 100%;
+      max-width: 1000px; /* Increased from 800px */
+      padding: 2rem 2rem 10rem;
+      display: flex; flex-direction: column; gap: 1.5rem;
+    }
+    
+    @media (min-width: 1600px) {
+        .chat-inner-container { max-width: 1200px; }
+    }
+
+    /* Greeting */
+    .greeting-wrapper {
+      margin-top: 10vh; text-align: center;
+      animation: fadeIn 0.6s ease-out;
+    }
+	    .hero-title {
+	      font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);
+	    }
+    .hero-sub {
+      color: var(--text-muted); font-size: 1.05rem; line-height: 1.6;
+      max-width: 650px; margin: 0 auto 3rem;
+    }
+
+    .card-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem; text-align: left;
+    }
+    .prompt-card {
+      background: var(--bg-sidebar); border: 1px solid var(--border);
+      padding: 1.5rem; border-radius: 12px; cursor: pointer; transition: 0.2s;
+    }
+	    .prompt-card:hover { border-color: var(--accent); transform: translateY(-2px); background: #162032; }
+	    .prompt-card h4 { margin: 0 0 0.5rem; font-size: 0.95rem; color: #fff; }
+	    .prompt-card p { margin: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+	    html[data-theme="light"] .prompt-card:hover { background: rgba(2,6,23,0.02); }
+	    html[data-theme="light"] .prompt-card h4 { color: var(--text-main); }
+
+    /* Messages */
+	    .message-row {
+	      display: flex; gap: 1.2rem;
+	      width: 100%;
+	      animation: fadeIn 0.3s ease;
+	      padding: 1.5rem 0;
+	      border-bottom: 1px solid rgba(255,255,255,0.02);
+	    }
+	    /* User messages on right, AI on left */
+	    .message-row.user {
+	      flex-direction: row-reverse;
+	      justify-content: flex-start; /* with row-reverse, flex-start is the right side */
+	    }
+	    .message-row.user .message-content {
+	      /* Keep the message on the right, but keep text left-aligned for readability */
+	      text-align: left;
+	      flex: 0 1 auto;
+	      max-width: 70%;
+	      background: rgba(148, 163, 184, 0.12);
+	      border: 1px solid rgba(255, 255, 255, 0.10);
+	      border-radius: 14px;
+	      padding: 0.85rem 1rem;
+	      box-shadow: 0 8px 20px -10px rgba(0,0,0,0.4);
+	    }
+	    html[data-theme="light"] .message-row.user .message-content {
+	      background: rgba(2, 6, 23, 0.05);
+	      border-color: rgba(2, 6, 23, 0.10);
+	      box-shadow: 0 8px 20px -12px rgba(2,6,23,0.18);
+	    }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+    .avatar {
+      width: 36px; height: 36px; border-radius: 6px;
+      flex-shrink: 0; 
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; font-weight: 700;
+    }
+	    .avatar.user { background: #334155; color: #fff; }
+	    .avatar.ai {
+	      background: rgba(255,255,255,0.02);
+	      border: 1px solid var(--border);
+	      padding: 0;
+	    }
+	    html[data-theme="light"] .avatar.ai { background: rgba(2,6,23,0.03); }
+	    .avatar-logo {
+	      width: 100%;
+	      height: 100%;
+	      object-fit: cover;
+	      border-radius: 6px;
+	      display: block;
+	    }
+
+    .message-content {
+      flex: 1; 
+      min-width: 0;
+      font-size: 1rem; line-height: 1.65; color: var(--text-main);
+    }
+    
+	    /* Markdown Styles */
+	    .message-content h2, .message-content h3 { color: #fff; margin-top: 1.5rem; font-weight: 600; }
+	    html[data-theme="light"] .message-content h2,
+	    html[data-theme="light"] .message-content h3 { color: var(--text-main); }
+    .message-content p { margin-bottom: 0.8rem; }
+    .message-content strong { color: var(--accent); font-weight: 600; }
+    .message-content code {
+      background: rgba(34, 211, 238, 0.08); color: var(--accent);
+      padding: 0.2em 0.4em; border-radius: 4px; font-family: var(--font-mono); font-size: 0.9em;
+    }
+    .message-content ul { padding-left: 1.2rem; }
+    .message-content li { margin-bottom: 0.3rem; }
+    .message-content blockquote {
+      border-left: 3px solid var(--accent); margin: 1rem 0; padding-left: 1rem;
+      color: var(--text-muted); font-style: italic; background: rgba(255,255,255,0.03); padding: 0.5rem 1rem;
+    }
+
+    /* --- INPUT AREA --- */
+    .input-container {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 0 1rem 2rem;
+      background: linear-gradient(to top, var(--bg-app) 75%, transparent);
+      display: flex; justify-content: center;
+      z-index: 50;
+    }
+
+    .input-box-wrapper {
+      width: 100%; 
+      max-width: 1000px; /* Increased from 800px */
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      display: flex; flex-direction: column;
+      transition: border-color 0.2s;
+      overflow: hidden;
+    }
+    @media (min-width: 1600px) {
+        .input-box-wrapper { max-width: 1200px; }
+    }
+    .input-box-wrapper:focus-within { border-color: var(--accent); }
+
+	    textarea {
+	      width: 100%; background: transparent; border: none; outline: none;
+	      color: var(--text-main); font-family: var(--font-main); font-size: 1rem;
+	      resize: none; padding: 1rem 1rem 0.5rem;
+	      min-height: 50px; max-height: 200px; line-height: 1.5;
+	    }
+
+    /* NEW: upload + mode bar */
+    .upload-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.9rem 0.2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .upload-left {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-width: 0;
+    }
+
+    .upload-btn {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 6px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .upload-btn:hover { border-color: var(--accent); background: rgba(34,211,238,0.06); }
+
+    .file-pill {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: rgba(34,211,238,0.08);
+      border: 1px solid rgba(34,211,238,0.22);
+      color: var(--text-main);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      min-width: 0;
+      max-width: 520px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .file-pill .file-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .file-pill .remove-file {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0 2px;
+      font-size: 0.95rem;
+    }
+    .file-pill .remove-file:hover { color: #fff; }
+
+    .mode-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .mode-tag {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 999px;
+      padding: 4px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mode-tag.active {
+      color: var(--accent);
+      border-color: rgba(34,211,238,0.35);
+      background: rgba(34,211,238,0.06);
+    }
+    .mode-tag input { display: none; }
+
+    .input-action-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.5rem 0.8rem 0.8rem;
+    }
+
+    .input-info { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 10px; }
+    
+	    .run-btn {
+	      background: var(--accent); color: var(--text-invert); border: none;
+	      padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 0.85rem;
+	      cursor: pointer; display: flex; align-items: center; gap: 6px;
+	      transition: filter 0.2s;
+	    }
+    .run-btn:hover { filter: brightness(1.1); }
+    .run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* --- RIGHT GRAPH PANEL --- */
+    .resizer {
+      width: 6px; cursor: col-resize; background: var(--bg-app);
+      border-left: 1px solid var(--border);
+      z-index: 25; transition: background 0.2s;
+    }
+    .resizer:hover { background: var(--accent); }
+
+    .graph-panel {
+      /* Prefer the chat area to be wider than the graph on typical laptop widths */
+      width: clamp(280px, 26vw, 520px);
+      min-width: 280px;
+      max-width: 42vw;
+      background: var(--bg-sidebar);
+      display: flex; flex-direction: column;
+      /* Allow shrinking so the main chat stays wider on smaller screens */
+      flex-shrink: 1;
+      z-index: 20;
+    }
+
+    .graph-header {
+      padding: 0.8rem 1rem; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .graph-title { font-size: 0.95rem; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+    .dl-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; padding: 3px 8px; cursor: pointer; font-size: 0.75rem; }
+	    .dl-btn:hover { color: var(--text-main); border-color: var(--text-main); }
+
+	    #kg-graph { flex: 1; background: var(--bg-app); }
+
+    .graph-legend {
+      padding: 0.6rem; border-top: 1px solid var(--border);
+      display: flex; justify-content: center; gap: 1rem; font-size: 0.95rem; color: var(--text-muted);
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%}
+
+    /* Node Detail Card */
+    .node-card {
+      position: fixed; z-index: 9999;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid var(--border-strong);
+      border-radius: 12px; padding: 1rem; width: 300px;
+      color: var(--text-main); font-size: 0.85rem;
+      box-shadow: var(--shadow-lg); backdrop-filter: blur(10px);
+      pointer-events: none; opacity: 0; transition: opacity 0.2s;
+    }
+    .node-card.visible { opacity: 1; }
+
+    @media (max-width: 1024px) {
+      .graph-panel, .resizer { display: none; }
+    }
+
+    /* Plot cards (make them match your message rows, not white boxes) */
+    .plot-message {
+      margin: 0;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      border: none;
+      width: 100%;
+    }
+
+	    .plot-title {
+	      font-weight: 600;
+	      margin-bottom: 10px;
+	      color: #fff;
+	    }
+	    html[data-theme="light"] .plot-title { color: var(--text-main); }
+
+    .plot-frame {
+      width: 100%;
+      height: 560px;
+      border: 0;
+      border-radius: 10px;
+      background: white;
+    }
+
+  </style>
+</head>
+<body>
+
+	  <aside class="sidebar">
+	    <div class="brand-header">
+	      <img class="brand-logo cmh-logo" src="/static_v3/CMH-AI-darkmode-notext.jpg" data-dark-src="/static_v3/CMH-AI-darkmode-notext.jpg" data-light-src="/static_v3/CMH-AI-darkmode-notext.jpg" alt="CMH-AI" />
+	      <span class="brand-text">Cancer-Metabolite AI</span>
+	    </div>
+
+	    <button class="new-chat-btn" onclick="startNewSession()">
+	      <i class="fa-solid fa-plus"></i> New Inquiry
+	    </button>
+
+	    <div class="history-container">
+	      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 0.5rem 0.5rem;gap:0.75rem;">
+	        <div class="history-label" style="padding:0;">Previous Research</div>
+	        <button class="dl-btn" type="button" onclick="clearAllInquiries()" title="Delete all inquiries">Clear</button>
+	      </div>
+	      <div id="history-list"></div>
+	    </div>
+
+	    <div class="sidebar-footer">
+	      <a href="/about" class="nav-link"><i class="fa-regular fa-file-lines"></i> Methodology</a>
+	      <a href="https://www.bdrl.org" target="_blank" class="nav-link"><i class="fa-solid fa-flask"></i> Lab Team</a>
+	      <button class="theme-toggle-btn" id="theme-toggle" type="button" title="Toggle light/dark mode">
+	        <span style="display:inline-flex;align-items:center;gap:0.6rem;">
+	          <i class="fa-regular fa-moon" id="theme-icon"></i>
+	          <span>Light/Dark mode</span>
+	        </span>
+	        <span class="pill" id="theme-pill">Dark</span>
+	      </button>
+	    </div>
+	  </aside>
+
+	  <main class="main-view">
+	    <div class="top-bar">
+	      <div style="font-size: 0.9rem; font-weight: 500; color: var(--text-muted);">Workspace</div>
+	      <div class="top-badges">
+	        <div class="status-badge muted" id="file-status-badge" title="Dataset status"></div>
+	        <div class="status-badge" id="system-status-badge">
+	          <span class="status-dot"></span> KG-RAG Active
+	        </div>
+	      </div>
+	    </div>
+
+    <div class="chat-scroll" id="chat-scroll">
+      <div class="chat-inner-container" id="chat-output">
+        
+        <div class="greeting-wrapper" id="greeting">
+          <h1 class="hero-title">Cancer-Metabolite AI</h1>
+          <p class="hero-sub">
+            Synthesize insights from 3M+ high-impact papers. 
+            Trace complex pathways between metabolites, genes, and cancer phenotypes.
+          </p>
+
+          <div class="card-grid">
+            <div class="prompt-card" onclick="setInput('What evidence links 2-hydroxyglutarate to glioma progression?')">
+              <h4>2-HG ↔ Glioma</h4>
+              <p>Analyze progression pathways & evidence.</p>
+            </div>
+            <div class="prompt-card" onclick="setInput('Summarize associations between tryptophan metabolism and immunotherapy.')">
+              <h4>Tryptophan & IO</h4>
+              <p>Impact on melanoma response rates.</p>
+            </div>
+            <div class="prompt-card" onclick="setInput('Link cancer, metabolism and protein functions in TME.')">
+              <h4>TME Interactions</h4>
+              <p>Metabolism & protein function links.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-container">
+      <div class="input-box-wrapper">
+
+        <!-- upload + scChat toggle row -->
+        <div class="upload-bar">
+          <div class="upload-left">
+            <input id="file-input" type="file" style="display:none" accept=".h5ad,.h5mu,.csv,.tsv,.txt,.json" />
+            <button class="upload-btn" id="upload-btn" type="button" title="Upload a dataset (scChat will be used only when a file is attached)">
+              <i class="fa-solid fa-paperclip"></i> Attach file
+            </button>
+
+            <div class="file-pill" id="file-pill" title="">
+              <i class="fa-solid fa-file-lines" style="color: var(--accent)"></i>
+              <span class="file-name" id="file-name"></span>
+              <button class="remove-file" id="remove-file" type="button" title="Remove file">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mode-right">
+            <label class="mode-tag" id="mode-kg">
+              <input type="radio" name="mode" value="kg" checked />
+              <i class="fa-solid fa-diagram-project"></i> KG only mode
+            </label>
+            <label class="mode-tag" id="mode-scchat">
+              <input type="radio" name="mode" value="scchat" />
+              <i class="fa-solid fa-flask"></i> KG and File context mode
+            </label>
+          </div>
+        </div>
+
+        <textarea id="query" rows="1" placeholder="Ask me to describe a metabolic pathway or cancer mechanism..."></textarea>
+        
+        <div class="input-action-bar">
+          <div class="input-info">
+             <span id="latency-display">Latency: --</span> 
+             <span style="color:rgba(255,255,255,0.1)">|</span>
+             <span id="mode-hint">Powered by Knowledge HyperGraph</span>
+          </div>
+          <button class="run-btn" id="run-btn">
+            Run Query <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="resizer" id="drag-handle"></div>
+
+  <aside class="graph-panel" id="graph-panel">
+    <div class="graph-header">
+      <div class="graph-title"><i class="fa-solid fa-diagram-project"></i> Evidence Graph</div>
+      <button class="dl-btn" id="dl-btn"><i class="fa-solid fa-download"></i> JSON</button>
+    </div>
+    <div id="kg-graph"></div>
+    <div class="graph-legend">
+      <span><span class="dot" style="background:#38bdf8; display:inline-block"></span> Entity</span>
+      <span><span class="dot" style="background:#a855f7; display:inline-block; border-radius:0; transform:rotate(45deg)"></span> Evidence</span>
+    </div>
+  </aside>
+
+  <div id="node-card" class="node-card"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+  <script src="https://unpkg.com/cytoscape@3.28.1/dist/cytoscape.min.js"></script>
+
+  <script>
+  // --- STATE & STORAGE CONFIGURATION ---
+  const STORAGE_KEY = 'cm_sessions_v1';
+  const THEME_KEY = 'cm_theme_v1';
+  const MAX_SESSIONS = 10;
+  const MAX_STORAGE_SIZE = 4 * 1024 * 1024; // 4MB cap
+  const GRAPH_MAX_BYTES = 1_000_000; // 1MB graph cap per session
+
+  const SCCHAT_ENDPOINT = "/api/query_with_file";
+  const KG_ENDPOINT = "/api/query";
+
+  const clientSessionId = (() => {
+    const k = "cm_client_session_id";
+    let v = sessionStorage.getItem(k);
+    if (!v) {
+      v = Math.random().toString(16).slice(2) + Date.now().toString(16);
+      sessionStorage.setItem(k, v);
+    }
+    return v;
+  })();
+
+  let sessions = loadSafeSessions();
+  let currentSessionId = null;
+  let isRunning = false;
+  let cy = null;
+
+  let attachedFile = null; // File object
+  let mode = "kg";         // "kg" | "scchat"
+
+  // --- DOM REFERENCES ---
+  const queryBox = document.getElementById("query");
+  const runBtn = document.getElementById("run-btn");
+  const chatOutput = document.getElementById("chat-output");
+  const chatScroll = document.getElementById("chat-scroll");
+  const greeting = document.getElementById("greeting");
+  const historyList = document.getElementById("history-list");
+  const latencyDisplay = document.getElementById("latency-display");
+  const dlBtn = document.getElementById("dl-btn");
+  const nodeCard = document.getElementById("node-card");
+  const fileStatusBadge = document.getElementById("file-status-badge");
+  const themeToggleBtn = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+  const themePill = document.getElementById("theme-pill");
+
+  const fileInput = document.getElementById("file-input");
+  const uploadBtn = document.getElementById("upload-btn");
+  const filePill = document.getElementById("file-pill");
+  const fileNameEl = document.getElementById("file-name");
+  const removeFileBtn = document.getElementById("remove-file");
+  const modeKg = document.getElementById("mode-kg");
+  const modeScchat = document.getElementById("mode-scchat");
+  const modeHint = document.getElementById("mode-hint");
+
+  // --- NEW: plot rendering target & clearing ---
+  // All plots will be inserted as standard message rows (so they clear like everything else).
+  function clearTransientUI() {
+    // Clear any existing plot rows + old message rows
+    document.querySelectorAll('.message-row').forEach(m => m.remove());
+    // Also hide node card if it was showing
+    if (nodeCard) nodeCard.classList.remove('visible');
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    applyTheme(loadTheme());
+    pruneSessionsInPlace();
+    renderHistoryList();
+    updateModeUI();
+    updateFileUI();
+    updateFileStatusBadge();
+    enforceGraphPanelBounds();
+  });
+
+  function loadTheme() {
+    try {
+      const v = localStorage.getItem(THEME_KEY);
+      return v === "dark" ? "dark" : "light";
+    } catch {
+      return "light";
+    }
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme === "light" ? "light" : "dark";
+    try { localStorage.setItem(THEME_KEY, theme); } catch {}
+    updateThemeToggleUI();
+    updateLogoAssets();
+    applyGraphTheme();
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.dataset.theme === "light" ? "light" : "dark";
+    applyTheme(current === "light" ? "dark" : "light");
+  }
+
+  function updateThemeToggleUI() {
+    if (!themePill || !themeIcon) return;
+    const isLight = document.documentElement.dataset.theme === "light";
+    themePill.textContent = isLight ? "Light" : "Dark";
+    themeIcon.className = isLight ? "fa-regular fa-sun" : "fa-regular fa-moon";
+  }
+
+  if (themeToggleBtn) themeToggleBtn.addEventListener("click", toggleTheme);
+
+  function updateLogoAssets() {
+    const isLight = document.documentElement.dataset.theme === "light";
+    document.querySelectorAll("img.cmh-logo").forEach((img) => {
+      const lightSrc = img.getAttribute("data-light-src");
+      const darkSrc = img.getAttribute("data-dark-src");
+      const next = isLight ? lightSrc : darkSrc;
+      if (next && img.getAttribute("src") !== next) img.setAttribute("src", next);
+    });
+  }
+
+  function buildCyStyle() {
+    const isLight = document.documentElement.dataset.theme === "light";
+    const labelColor = isLight ? "#0f172a" : "#fff";
+    const edgeColor = isLight ? "#64748b" : "#475569";
+    const edgeOpacity = isLight ? 0.65 : 0.5;
+
+    return [
+      {
+        selector: 'node[role = "entity"]',
+        style: {
+          "background-color": "#38bdf8",
+          "label": "data(shortLabel)",
+          "font-size": "10px",
+          "color": labelColor,
+          "text-valign": "bottom",
+          "text-margin-y": 4,
+          "width": "mapData(size, 20, 70, 20, 50)",
+          "height": "mapData(size, 20, 70, 20, 50)"
+        }
+      },
+      {
+        selector: 'node[role = "hyperedge"]',
+        style: {
+          "background-color": "#a855f7",
+          "shape": "diamond",
+          "width": 14,
+          "height": 14,
+          "label": ""
+        }
+      },
+      {
+        selector: "edge",
+        style: {
+          "line-color": edgeColor,
+          "width": 1,
+          "curve-style": "bezier",
+          "opacity": edgeOpacity,
+          "target-arrow-shape": "triangle",
+          "target-arrow-color": edgeColor
+        }
+      },
+      { selector: ":selected", style: { "border-width": 2, "border-color": "#facc15" } }
+    ];
+  }
+
+  function applyGraphTheme() {
+    if (!cy) return;
+    try {
+      cy.style().fromJson(buildCyStyle()).update();
+      cy.resize();
+    } catch (e) {
+      // Ignore: cy may not be initialized yet or style update may fail in older Cytoscape versions.
+    }
+  }
+
+  // --- RESIZER LOGIC ---
+  const resizer = document.getElementById('drag-handle');
+  const rightPanel = document.getElementById('graph-panel');
+  let isResizing = false;
+
+  function clampGraphPanelWidth(px) {
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarW = sidebar ? sidebar.getBoundingClientRect().width : 260;
+    const resizerW = resizer ? resizer.getBoundingClientRect().width : 6;
+    const minMainW = 640; // keep chat area wider on laptops
+
+    const minRightW = 280;
+    const maxRightByMinMain = Math.max(minRightW, window.innerWidth - sidebarW - resizerW - minMainW);
+    const maxRightByRatio = Math.floor(window.innerWidth * 0.42);
+    const maxRightW = Math.max(minRightW, Math.min(maxRightByMinMain, maxRightByRatio));
+
+    return Math.max(minRightW, Math.min(px, maxRightW));
+  }
+
+  function enforceGraphPanelBounds() {
+    if (!rightPanel) return;
+    const current = rightPanel.getBoundingClientRect().width;
+    const clamped = clampGraphPanelWidth(current);
+    if (Math.abs(clamped - current) > 1) rightPanel.style.width = `${clamped}px`;
+  }
+
+  resizer.addEventListener('mousedown', (e) => {
+    isResizing = true;
+    document.body.style.cursor = 'col-resize';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isResizing) return;
+    const newWidth = window.innerWidth - e.clientX;
+    rightPanel.style.width = `${clampGraphPanelWidth(newWidth)}px`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!isResizing) return;
+    isResizing = false;
+    document.body.style.cursor = 'default';
+    if (cy) cy.resize();
+  });
+
+  window.addEventListener('resize', () => {
+    enforceGraphPanelBounds();
+    if (cy) cy.resize();
+  });
+
+  // --- INPUT LOGIC ---
+  queryBox.addEventListener('input', function () {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+    if (this.value === '') this.style.height = 'auto';
+  });
+
+  queryBox.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      submitQuery();
+    }
+  });
+
+  function setInput(text) {
+    queryBox.value = text;
+    queryBox.focus();
+  }
+
+  // --- FILE + MODE LOGIC ---
+  if (uploadBtn && fileInput) {
+    uploadBtn.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", () => {
+      const f = fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+      attachedFile = f;
+      updateFileUI();
+      if (attachedFile) setMode("scchat");
+      else setMode("kg");
+      updateFileStatusBadge();
+    });
+  }
+
+  if (removeFileBtn) {
+    removeFileBtn.addEventListener("click", () => {
+      attachedFile = null;
+      if (fileInput) fileInput.value = "";
+      updateFileUI();
+      setMode("kg");
+      updateFileStatusBadge();
+    });
+  }
+
+  if (modeKg) modeKg.addEventListener("click", () => setMode("kg"));
+  if (modeScchat) {
+    modeScchat.addEventListener("click", () => {
+      if (!attachedFile) {
+        flashModeHint("Attach a file to use File mode.");
+        setMode("kg");
+        return;
+      }
+      setMode("scchat");
+    });
+  }
+
+  function setMode(nextMode) {
+    mode = nextMode;
+    updateModeUI();
+    updateFileStatusBadge();
+  }
+
+  function updateModeUI() {
+    if (!modeKg || !modeScchat || !modeHint) return;
+
+    const kgActive = mode === "kg";
+    modeKg.classList.toggle("active", kgActive);
+    modeScchat.classList.toggle("active", !kgActive);
+
+    const kgInput = modeKg.querySelector('input');
+    const scInput = modeScchat.querySelector('input');
+    if (kgInput) kgInput.checked = kgActive;
+    if (scInput) scInput.checked = !kgActive;
+
+    modeHint.textContent =
+      mode === "scchat"
+        ? "File mode: scChat answers using your uploaded dataset"
+        : "Powered by Knowledge HyperGraph";
+  }
+
+  function updateFileUI() {
+    if (!filePill || !fileNameEl) return;
+    if (attachedFile) {
+      filePill.style.display = "inline-flex";
+      fileNameEl.textContent = attachedFile.name;
+      filePill.title = attachedFile.name;
+    } else {
+      filePill.style.display = "none";
+      fileNameEl.textContent = "";
+      filePill.title = "";
+    }
+  }
+
+  function updateFileStatusBadge(viewedSession = null) {
+    if (!fileStatusBadge) return;
+
+    const viewedHasFile = viewedSession && (viewedSession.modeUsed === "scchat") && viewedSession.fileName;
+    const activeHasFile = !!attachedFile;
+
+    if (activeHasFile) {
+      const name = attachedFile.name;
+      if (mode === "scchat") {
+        fileStatusBadge.classList.remove("muted");
+        fileStatusBadge.innerHTML = `<span class="status-dot"></span> Using file: <span style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(name)}</span>`;
+        fileStatusBadge.title = `Answers are generated using the attached dataset: ${name}`;
+      } else {
+        fileStatusBadge.classList.add("muted");
+        fileStatusBadge.innerHTML = `<i class="fa-regular fa-file-lines"></i> File attached (KG mode): <span style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(name)}</span>`;
+        fileStatusBadge.title = `A file is attached (${name}), but KG mode is selected. Switch to File mode to use it.`;
+      }
+      return;
+    }
+
+    if (viewedHasFile) {
+      fileStatusBadge.classList.add("muted");
+      fileStatusBadge.innerHTML = `<i class="fa-regular fa-file-lines"></i> This inquiry used: <span style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(viewedSession.fileName)}</span>`;
+      fileStatusBadge.title = `This saved inquiry's answer was generated using the dataset: ${viewedSession.fileName}. Attach the file again to run new file-based queries.`;
+      return;
+    }
+
+    fileStatusBadge.classList.add("muted");
+    fileStatusBadge.innerHTML = `<i class="fa-regular fa-circle"></i> No file attached`;
+    fileStatusBadge.title = "No dataset is attached; answers are generated from the Knowledge HyperGraph.";
+  }
+
+  function flashModeHint(msg) {
+    if (!modeHint) return;
+    const old = modeHint.textContent;
+    modeHint.textContent = msg;
+    modeHint.style.color = "#facc15";
+    setTimeout(() => {
+      modeHint.textContent = old;
+      modeHint.style.color = "";
+    }, 1400);
+  }
+
+  function escapeHtml(s) {
+    return String(s || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  // --- SAFE SESSION MANAGEMENT ---
+  function loadSafeSessions() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      const parsed = data ? JSON.parse(data) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      console.warn("Could not load sessions:", e);
+      return [];
+    }
+  }
+
+  function pruneSessionsInPlace() {
+    if (!Array.isArray(sessions)) sessions = [];
+    if (sessions.length > MAX_SESSIONS) {
+      const removed = sessions.length - MAX_SESSIONS;
+      sessions = sessions.slice(-MAX_SESSIONS);
+      if (currentSessionId !== null) {
+        currentSessionId = Math.max(0, currentSessionId - removed);
+        if (currentSessionId >= sessions.length) currentSessionId = sessions.length - 1;
+      }
+    }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions)); } catch {}
+  }
+
+  function saveSessions() {
+    pruneSessionsInPlace();
+    const safeSessions = sessions.map(s => {
+      const graphStr = JSON.stringify(s.graphData || {});
+      const isGraphTooBig = graphStr.length > GRAPH_MAX_BYTES;
+
+      return {
+        id: s.id,
+        inquiryId: s.inquiryId || null,
+        query: s.query,
+        answerHtml: s.answerHtml,
+        latency: s.latency,
+        graphData: isGraphTooBig ? null : s.graphData,
+        modeUsed: s.modeUsed || "kg",
+        fileName: s.fileName || null,
+        plots: s.plots || null
+      };
+    });
+
+    try {
+      const serialized = JSON.stringify(safeSessions);
+      if (serialized.length > MAX_STORAGE_SIZE) {
+        sessions.shift();
+        if (currentSessionId !== null) {
+          currentSessionId -= 1;
+          if (currentSessionId < 0) currentSessionId = null;
+        }
+        saveSessions();
+      } else {
+        localStorage.setItem(STORAGE_KEY, serialized);
+      }
+    } catch (e) {
+      console.error("Storage quota exceeded. Clearing oldest history.");
+      sessions = sessions.slice(-MAX_SESSIONS);
+      if (currentSessionId !== null && currentSessionId >= sessions.length) currentSessionId = sessions.length - 1;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
+    }
+  }
+
+  function startNewSession() {
+    currentSessionId = null;
+
+    // ✅ important: wipe transient UI including plots
+    clearTransientUI();
+
+    // ✅ New inquiry should NOT carry over any previously attached file
+    attachedFile = null;
+    if (fileInput) fileInput.value = "";
+    updateFileUI();
+    setMode("kg");
+
+    // show greeting again
+    greeting.style.display = 'block';
+
+    // clear graph view
+    if (cy) cy.elements().remove();
+    latencyDisplay.textContent = 'Latency: --';
+
+    document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
+    updateFileStatusBadge();
+  }
+
+  function renderHistoryList() {
+    historyList.innerHTML = '';
+    const startIndex = Math.max(0, sessions.length - MAX_SESSIONS);
+    for (let i = sessions.length - 1; i >= startIndex; i--) {
+      const session = sessions[i];
+
+      const row = document.createElement('div');
+      row.className = `history-item ${i === currentSessionId ? 'active' : ''}`;
+      row.style.display = "flex";
+      row.style.alignItems = "center";
+      row.style.justifyContent = "space-between";
+      row.style.gap = "0.75rem";
+
+      const text = document.createElement('div');
+      text.style.flex = "1";
+      text.style.minWidth = "0";
+      text.style.overflow = "hidden";
+      text.style.textOverflow = "ellipsis";
+      text.style.whiteSpace = "nowrap";
+      text.title = session.query || "";
+
+      const q = (session.query || "").trim();
+      const maxLen = 48;
+      text.textContent = q.length > maxLen ? (q.slice(0, maxLen - 1) + "…") : q;
+
+      const del = document.createElement('button');
+      del.type = "button";
+      del.title = "Delete inquiry";
+      del.setAttribute("aria-label", "Delete inquiry");
+      del.style.flexShrink = "0";
+      del.style.border = "1px solid var(--border)";
+      del.style.background = "transparent";
+      del.style.color = "var(--text-muted)";
+      del.style.borderRadius = "8px";
+      del.style.padding = "4px 8px";
+      del.style.cursor = "pointer";
+      del.innerHTML = '<i class="fa-regular fa-trash-can"></i>';
+      del.addEventListener("click", (e) => {
+        e.stopPropagation();
+        deleteInquiry(i);
+      });
+
+      row.appendChild(text);
+      row.appendChild(del);
+      row.addEventListener('click', () => loadSession(i));
+      historyList.appendChild(row);
+    }
+  }
+
+  function deleteInquiry(index) {
+    if (index < 0 || index >= sessions.length) return;
+    sessions.splice(index, 1);
+
+    if (currentSessionId === index) currentSessionId = null;
+    else if (currentSessionId !== null && currentSessionId > index) currentSessionId -= 1;
+
+    saveSessions();
+    renderHistoryList();
+
+    if (currentSessionId === null) startNewSession();
+  }
+
+  function clearAllInquiries() {
+    sessions = [];
+    currentSessionId = null;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify([])); } catch {}
+    renderHistoryList();
+    startNewSession();
+  }
+
+  function loadSession(index) {
+    currentSessionId = index;
+    const session = sessions[index];
+    renderHistoryList();
+    renderChatView(session);
+
+    if (session.graphData) initGraph(session.graphData);
+    else if (cy) cy.elements().remove();
+
+    latencyDisplay.textContent = `Latency: ${session.latency || '--'}s`;
+
+    if (session.fileName && modeHint) {
+      flashModeHint(`Session used file: ${session.fileName}`);
+    }
+    updateFileStatusBadge(session);
+    renderPlotsFromList(session.plots);
+  }
+
+  function renderChatView(session) {
+    // ✅ clear all previous rows (messages + plots)
+    clearTransientUI();
+
+    if (!session) {
+      greeting.style.display = 'block';
+      if (cy) cy.elements().remove();
+      latencyDisplay.textContent = 'Latency: --';
+      return;
+    }
+
+    greeting.style.display = 'none';
+    appendMessage(true, session.query);
+    appendMessage(false, session.answerHtml);
+  }
+
+  function appendMessage(isUser, htmlContent) {
+    const row = document.createElement('div');
+    row.className = `message-row ${isUser ? 'user' : 'ai'}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = `avatar ${isUser ? 'user' : 'ai'}`;
+    avatar.innerHTML = isUser
+      ? '<i class="fa-regular fa-user"></i>'
+      : '<img class="avatar-logo cmh-logo" src="/static_v3/CMH-AI-darkmode-notext.jpg" data-dark-src="/static_v3/CMH-AI-darkmode-notext.jpg" data-light-src="/static_v3/CMH-AI-darkmode-notext.jpg" alt="CMH-AI" />';
+
+    const content = document.createElement('div');
+    content.className = 'message-content';
+    content.innerHTML = htmlContent;
+
+    row.appendChild(avatar);
+    row.appendChild(content);
+    chatOutput.appendChild(row);
+
+    requestAnimationFrame(() => {
+      chatScroll.scrollTop = chatScroll.scrollHeight;
+    });
+
+    return content;
+  }
+
+  // ✅ NEW: append plot as a standard message-row so it clears automatically
+  function appendPlotRow(title, html) {
+    const row = document.createElement('div');
+    row.className = 'message-row plot-row';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar ai';
+    avatar.innerHTML = '<img class="avatar-logo cmh-logo" src="/static_v3/CMH-AI-darkmode-notext.jpg" data-dark-src="/static_v3/CMH-AI-darkmode-notext.jpg" data-light-src="/static_v3/CMH-AI-darkmode-notext.jpg" alt="CMH-AI" />';
+
+    const content = document.createElement('div');
+    content.className = 'message-content';
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "plot-message";
+
+    const header = document.createElement("div");
+    header.className = "plot-title";
+    header.textContent = title || "Plot";
+
+    const iframe = document.createElement("iframe");
+    iframe.className = "plot-frame";
+    iframe.setAttribute("sandbox", "allow-scripts allow-same-origin");
+    iframe.srcdoc = html || "<html><body>No plot</body></html>";
+
+    wrapper.appendChild(header);
+    wrapper.appendChild(iframe);
+    content.appendChild(wrapper);
+
+    row.appendChild(avatar);
+    row.appendChild(content);
+    chatOutput.appendChild(row);
+
+    requestAnimationFrame(() => {
+      chatScroll.scrollTop = chatScroll.scrollHeight;
+    });
+  }
+
+  async function renderPlotsFromList(plots) {
+    // Always remove any existing plot rows before rendering a new set
+    document.querySelectorAll('.plot-row').forEach(el => el.remove());
+
+    if (!plots || !Array.isArray(plots) || plots.length === 0) return;
+
+    for (const p of plots) {
+      if (!p) continue;
+      const title = p.title || "Plot";
+
+      if (p.html) {
+        appendPlotRow(title, p.html);
+        continue;
+      }
+
+      if (p.url) {
+        try {
+          const r = await fetch(p.url);
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          const html = await r.text();
+          appendPlotRow(title, html);
+        } catch (e) {
+          appendPlotRow(
+            title,
+            `<html><body style="font-family:system-ui;padding:12px">Could not load plot: ${escapeHtml(String(e.message || e))}</body></html>`
+          );
+        }
+      }
+    }
+  }
+
+  // --- MAIN QUERY ---
+  async function submitQuery() {
+    const text = queryBox.value.trim();
+    if (!text || isRunning) return;
+
+    if (mode === "scchat" && !attachedFile) {
+      flashModeHint("Attach a file first, then run the query.");
+      return;
+    }
+
+    isRunning = true;
+    runBtn.disabled = true;
+    runBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+    const localInquiryId = Math.random().toString(16).slice(2) + Date.now().toString(16);
+
+    // ✅ For a "new inquiry", clear previous messages + plots before showing new response
+    if (currentSessionId === null) {
+      greeting.style.display = 'none';
+      clearTransientUI();
+    }
+
+    queryBox.value = '';
+    queryBox.style.height = 'auto';
+
+    appendMessage(true, text);
+
+    const loadingMsg =
+      mode === "scchat"
+        ? '<i class="fa-solid fa-circle-notch fa-spin"></i> Reading your file and reasoning over it...'
+        : '<i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing Knowledge HyperGraph...';
+
+    const loadingEl = appendMessage(false, loadingMsg);
+
+    if (!cy) initCytoscape();
+
+    const start = performance.now();
+    let stopTicker = null;
+
+    // No client-side timeout: keep waiting while the backend is still processing.
+    // This just updates the UI so users can see it's still running.
+    const startLoadingTicker = () => {
+      const base = loadingMsg;
+      stopTicker = setInterval(() => {
+        const seconds = Math.floor((performance.now() - start) / 1000);
+        latencyDisplay.textContent = `Elapsed: ${seconds}s`;
+        if (mode === "kg") {
+          loadingEl.innerHTML =
+            `${base}<div style="margin-top:10px;color:var(--text-muted);font-size:0.85rem">Still running… (${seconds}s)</div>`;
+        }
+      }, 1000);
+    };
+    const stopLoadingTicker = () => {
+      if (stopTicker) {
+        clearInterval(stopTicker);
+        stopTicker = null;
+      }
+    };
+    startLoadingTicker();
+
+    try {
+      let resp;
+
+      if (mode === "scchat") {
+        const form = new FormData();
+        form.append("file", attachedFile);
+        form.append("query", text);
+        form.append("session_id", clientSessionId);
+        form.append("inquiry_id", localInquiryId);
+
+        resp = await fetch(SCCHAT_ENDPOINT, { method: "POST", body: form });
+      } else {
+        resp = await fetch(KG_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: text }),
+        });
+      }
+
+      const elapsed = ((performance.now() - start) / 1000).toFixed(2);
+      stopLoadingTicker();
+
+      if (!resp.ok) {
+        const maybeText = await resp.text().catch(() => "");
+        throw new Error(maybeText ? maybeText.slice(0, 200) : "Server Error");
+      }
+
+      const data = await resp.json();
+
+      let md = data.answer || "No response generated.";
+      md = md.replace(/\n{3,}/g, "\n\n").trim();
+      const finalHtml = DOMPurify.sanitize(marked.parse(md));
+
+      // ✅ Render plots as message rows (loaded by URL for per-inquiry persistence)
+      await renderPlotsFromList(data.plots);
+
+      loadingEl.innerHTML = finalHtml;
+      latencyDisplay.textContent = `Latency: ${elapsed}s`;
+
+      if (data.graph) initGraph(data.graph);
+
+      const newSession = {
+        id: Date.now(),
+        inquiryId: data.inquiry_id || localInquiryId,
+        query: text,
+        answerRaw: data.answer,
+        answerHtml: finalHtml,
+        graphData: data.graph,
+        latency: elapsed,
+        modeUsed: mode,
+        fileName: attachedFile ? attachedFile.name : null,
+        plots: (data.plots && Array.isArray(data.plots))
+          ? data.plots.map(p => ({ title: (p && p.title) ? p.title : "Plot", url: (p && p.url) ? p.url : null, html: (p && p.html) ? p.html : null }))
+          : null
+      };
+
+      sessions.push(newSession);
+      currentSessionId = sessions.length - 1;
+
+      saveSessions();
+      renderHistoryList();
+
+    } catch (err) {
+      stopLoadingTicker();
+      loadingEl.innerHTML = `<span style="color:#f87171">Error: ${String(err.message || err)}</span>`;
+    } finally {
+      stopLoadingTicker();
+      isRunning = false;
+      runBtn.disabled = false;
+      runBtn.innerHTML = 'Run Query <i class="fa-solid fa-paper-plane"></i>';
+    }
+  }
+
+  // --- GRAPH LOGIC ---
+  function initCytoscape() {
+    const container = document.getElementById("kg-graph");
+    cy = cytoscape({
+      container,
+      elements: [],
+      style: buildCyStyle(),
+      layout: { name: "cose", padding: 10 }
+    });
+
+    cy.on('tap', 'node', (evt) => showNodeDetail(evt.target, evt.originalEvent.clientX, evt.originalEvent.clientY));
+    cy.on('tap', (evt) => { if (evt.target === cy) nodeCard.classList.remove('visible'); });
+    applyGraphTheme();
+  }
+
+  function initGraph(graphData) {
+    if (!cy) initCytoscape();
+    cy.elements().remove();
+
+    const nodes = (graphData.nodes || []).map(n => {
+      if (!n.data) n.data = {};
+      if (n.data.role !== 'hyperedge') {
+        const lbl = n.data.label || n.data.id || "?";
+        n.data.shortLabel = lbl.length > 15 ? lbl.substring(0, 14) + '...' : lbl;
+      }
+      return n;
+    });
+
+    cy.add([...nodes, ...(graphData.edges || [])]);
+    cy.layout({ name: 'cose', animate: true }).run();
+    cy.resize();
+  }
+
+  function showNodeDetail(node, x, y) {
+    const data = node.data();
+    let html = `<div class="node-detail-title" style="font-weight:700;color:#22d3ee;margin-bottom:4px">${data.label || data.id}</div>`;
+    html += `<div style="font-size:0.75rem;color:#94a3b8;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:8px">Type: ${data.role || 'Entity'}</div>`;
+
+    if (data.role === 'hyperedge') {
+      html += `<div style="line-height:1.4; color:#cbd5e1; font-size:0.85rem">${String(data.id || "").replace('<hyperedge>', '')}</div>`;
+    } else if (data.description) {
+      html += `<div style="line-height:1.4; color:#cbd5e1; font-size:0.85rem">${String(data.description).split('<SEP>')[0].replace(/"/g, '')}</div>`;
+    }
+
+    nodeCard.innerHTML = html;
+    nodeCard.classList.add('visible');
+
+    const rect = nodeCard.getBoundingClientRect();
+    let left = x + 15;
+    let top = y + 15;
+    if (left + rect.width > window.innerWidth) left = x - rect.width - 15;
+    if (top + rect.height > window.innerHeight) top = y - rect.height - 15;
+
+    nodeCard.style.left = `${left}px`;
+    nodeCard.style.top = `${top}px`;
+  }
+
+  dlBtn.addEventListener('click', () => {
+    if (!cy) return;
+    const json = cy.json();
+    const blob = new Blob([JSON.stringify(json, null, 2)], { type: "application/json" });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = "cm_graph.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  });
+
+  runBtn.addEventListener('click', submitQuery);
+  </script>
+</body>
+</html>

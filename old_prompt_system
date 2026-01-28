@@ -1,0 +1,78 @@
+    
+    # Reframe the query to include metabolic context - during the reframing and intent generation, make the prompt also provide the metabolite context.
+    met_ctx, met_json = MET.get_context(rewritten_query, top_reactions=20) # should use reframed_query
+    # final_query = rewritten_query + "\n\n. Here is the metabolite context, this is extracted from our well-curated database, and whenever relevant, use these very carefully and personalize your thinking and" + \
+    # "answering by using the necessary metabolic context about the entities in the current user's query given here: " + met_ctx + "\n\n I do not want very generic answers. You also must seperately indicate the genes/reactions/metabolites/compounds, relations you used from the metabolic context and critically indicate what did learn as new information that you did not extract before looking at the reactions and metabolic context data to answer the user's question."
+
+
+    seed_list = met_json.get("seeds", [])
+    seed_block = ", ".join(seed_list[:50]) if seed_list else "none"
+
+    pathway_views = met_json.get("pathway_views", [])
+    pathway_block = "\n".join(
+        f"- {pv.get('label','Unknown')}: {pv.get('why_selected','')}"
+        for pv in pathway_views[:4]
+    ) or "none"
+
+    rxs = met_json.get("reactions", [])
+    def rx_line(r):
+        rid = r.get("rid", "NA")
+        comp = r.get("compartment", "NA")
+        irrev = "IRREV" if r.get("irreversible") else "REV/UNK"
+        genes = ", ".join((r.get("genes") or [])[:8]) or "NA"
+        # Prefer named metabolites if you have in_mets/out_mets
+        in_mets = r.get("in_mets") or []
+        out_mets = r.get("out_mets") or []
+        
+        def met_fmt(m):
+            nm = m.get("name") or m.get("base_cid") or m.get("node")
+            return f"{nm} ({m.get('node')})"
+
+        ins = ", ".join(met_fmt(m) for m in in_mets[:6]) or ", ".join((r.get("in") or [])[:6]) or "NA"
+        outs = ", ".join(met_fmt(m) for m in out_mets[:6]) or ", ".join((r.get("out") or [])[:6]) or "NA"
+        pw = r.get("pathway") or "NA"
+        return f"* {rid} [{comp}] [{irrev}] pathway={pw}\n  genes: {genes}\n  in: {ins}\n  out: {outs}"
+
+    reaction_block = "\n".join(rx_line(r) for r in rxs[:12]) or "none"
+
+    final_query = f"""
+        USER QUESTION:
+        {rewritten_query}
+
+        METABOLIC NETWORK EVIDENCE (curated; only use what is inside this section):
+        Seeds mapped to network nodes:
+        {seed_block}
+
+        Pathway perspectives:
+        {pathway_block}
+
+        Top mechanistic reactions (cite BDRL_id when used):
+        {reaction_block}
+
+        Hard constraints you must obey:
+        - If a reaction is irreversible, do not reason in reverse unless an explicit reverse reaction exists.
+        - Do not jump compartments (e.g., _m to _c) unless a transport reaction is explicitly included.
+
+        RESPONSE REQUIREMENTS:
+        - Give 2–4 pathway-level perspectives.
+        - For each perspective:
+        (a) Mechanistic story in plain English
+        (b) Evidence list: genes, metabolites (name + CID), reactions (BDRL_id)
+        (c) What this metabolic view adds beyond literature-only reasoning
+        (d) Limits/uncertainty if evidence is missing
+        - End with: “Metabolic evidence actually used” (only list items you truly used).
+        """
+
+
+    logger.info("After metabolic context adding, the rewritten prompt: %s", final_query)
+
+
+    # # Reduce retrieved items and context sizes to avoid token overflow
+    param = QueryParam(
+        top_k=15,
+        max_token_for_text_unit=13000,
+        max_token_for_global_context=2000,
+        max_token_for_local_context=2000,
+    )
+    result = await rag.aquery(final_query, param)
+

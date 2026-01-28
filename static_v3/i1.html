@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>About – Metabolite–Cancer Knowledge Graph (GKHG)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-elevated: #0b1020;
+      --bg-soft: #111827;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --accent-strong: #0ea5e9;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --danger: #f97373;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 50%, #020617 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    .app-shell {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: conic-gradient(
+        from 160deg,
+        #22c55e,
+        #22c55e,
+        #38bdf8,
+        #6366f1,
+        #a855f7,
+        #22c55e
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-logo::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border-radius: inherit;
+      background: radial-gradient(circle at top, #020617, #020617 65%, #0f172a);
+    }
+
+    .brand-logo-initials {
+      position: relative;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+
+    .brand-text-main {
+      font-weight: 600;
+      font-size: 1.05rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .brand-text-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-size: 0.85rem;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+
+    .nav-link:hover {
+      color: var(--text-main);
+      border-color: rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .nav-link.active {
+      color: var(--text-main);
+      border-color: var(--accent);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .header-pill {
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+      margin-left: 0.75rem;
+    }
+
+    .header-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
+    }
+
+    main {
+      background: linear-gradient(
+        145deg,
+        rgba(15, 23, 42, 0.98),
+        rgba(15, 23, 42, 0.9)
+      );
+      border-radius: 24px;
+      padding: 1.8rem 1.7rem 2.1rem;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      box-shadow: var(--shadow-soft);
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin: 0 0 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+    }
+
+    h2 {
+      font-size: 1.05rem;
+      margin-top: 1.3rem;
+      margin-bottom: 0.4rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      margin: 0.4rem 0;
+    }
+
+    ul {
+      margin: 0.35rem 0 0.5rem;
+      padding-left: 1.1rem;
+      font-size: 0.88rem;
+      color: var(--text-main);
+    }
+
+    li {
+      margin: 0.2rem 0;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0.7rem 0 1.1rem;
+    }
+
+    .pill {
+      font-size: 0.78rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-muted);
+    }
+
+    .formula {
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.8rem;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 6px;
+      padding: 0.12rem 0.35rem;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    .section-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    @media (max-width: 720px) {
+      .app-shell {
+        padding-inline: 1rem;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="brand">
+        <div class="brand-logo">
+          <div class="brand-logo-initials">KG</div>
+        </div>
+        <div>
+          <div class="brand-text-main">Metabolite–Cancer Knowledge Graph</div>
+          <div class="brand-text-sub">Global Knowledge Hypergraph (GKHG)</div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center;">
+        <nav class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="about.html" class="nav-link active">About</a>
+          <a href="team.html" class="nav-link">Our Team</a>
+        </nav>
+        <div class="header-pill">
+          <span class="header-pill-dot"></span>
+          <span>Built on millions of curated papers</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <h1>About this project</h1>
+      <p class="subtitle">
+        This demo sits on top of a large-scale biomedical knowledge graph and a HypergraphRAG
+        pipeline designed for metabolite–cancer reasoning.
+      </p>
+
+      <h2>Data foundation</h2>
+      <p>We start from large, public full-text and metadata sources:</p>
+      <ul>
+        <li><strong>PMC full text:</strong> ~7 million papers (excluding manuscripts).</li>
+        <li><strong>OpenAlex:</strong> ~40 million papers with citation metadata.</li>
+        <li><strong>Alignment:</strong> PMC ↔ OpenAlex matching yields ~6.6 million linked papers.</li>
+        <li><strong>Domain filtering:</strong> ~3,400 metabolite, cancer, and pathway keywords
+          (including synonyms) are used to filter to ~5.5 million highly relevant papers.</li>
+      </ul>
+      <p class="section-note">
+        This gives us a broad but focused corpus for metabolite–cancer biology and related pathways.
+      </p>
+
+      <h2>Relevance scoring and paper selection</h2>
+      <p>
+        Each candidate paper is scored using multiple signals. All raw components are converted to
+        quantile ranks <span class="formula">qrank01(·)</span> to make the score robust to heavy tails
+        and outliers.
+      </p>
+
+      <ul>
+        <li>
+          <strong>Text signal (35%)</strong> – how strongly the paper’s content matches the domain:
+          <br />
+          <span class="formula">T1 = qrank01(section_boost)</span>,
+          <span class="formula">T2 = qrank01(density_per_1k)</span><br />
+          <span class="formula">text_signal = 0.8·T1 + 0.2·T2</span>
+        </li>
+        <li>
+          <strong>Citation signal (35%)</strong> – how impactful the work is:
+          <br />
+          <span class="formula">C = log(1 + cited_by_count)</span><br />
+          <span class="formula">cit_signal = qrank01(C)</span>
+        </li>
+        <li>
+          <strong>Recency signal (15%)</strong> – gentle preference for newer work:
+          <br />
+          <span class="formula">R<sub>sig</sub> = (pub_year − base_year, −10, 10)</span><br />
+          <span class="formula">recency_signal = qrank01(R<sub>sig</sub>)</span>
+        </li>
+        <li>
+          <strong>Journal prestige (15%)</strong> – combines several indexing metrics:
+          <br />
+          <span class="formula">
+            J = 0.55·qrank01(sjr_idx) + 0.20·qrank01(cites_doc_2y) +
+            0.15·qrank01(citescore) + 0.10·qrank01(hindex)
+          </span><br />
+          <span class="formula">journal_signal = qrank01(J)</span>
+        </li>
+      </ul>
+
+      <p>
+        All of these are combined into a single relevance score:
+      </p>
+      <p>
+        <span class="formula">
+          relevance = 0.35·text_signal + 0.35·cit_signal
+          + 0.15·recency_signal + 0.15·journal_signal
+        </span>
+      </p>
+
+      <div class="pill-row">
+        <div class="pill">Text relevance: 35%</div>
+        <div class="pill">Impact (citations): 35%</div>
+        <div class="pill">Recency: 15%</div>
+        <div class="pill">Journal prestige: 15%</div>
+        <div class="pill">Quantile ranks for robustness</div>
+      </div>
+
+      <h2>HypergraphRAG workflow</h2>
+      <p>
+        The pipeline uses HypergraphRAG to extract structured, multi-entity relations from the
+        filtered corpus and to support graph-aware question answering.
+      </p>
+      <ul>
+        <li><strong>Ingest:</strong> Full-text from PMC + citation graph from OpenAlex.</li>
+        <li><strong>Filter &amp; refine:</strong> Hard and fuzzy keyword search (e.g., “R-Glucose” and synonyms), 
+          citation-weighting, and removal of low-signal papers.</li>
+        <li><strong>Extract:</strong> HypergraphRAG calls an LLM to extract:
+          <ul>
+            <li>Entities (metabolites, cancers, pathways, conditions, nutrients…)</li>
+            <li>Hyperedges (multi-way relations with rich context sentences)</li>
+            <li>Textual descriptions and embedding vectors.</li>
+          </ul>
+        </li>
+        <li><strong>Build &amp; store:</strong> All entities, hyperedges, and their embeddings are
+          stored as a Global Knowledge Hypergraph (GKHG).</li>
+      </ul>
+
+      <h2>Query → graph → answer</h2>
+      <p>When you type a question in the demo, the backend runs a structured workflow:</p>
+      <ul>
+        <li><strong>1. Encode query:</strong> Convert the question into an embedding.</li>
+        <li><strong>2. Entity search:</strong> Retrieve nearest entities from the entity vector index.</li>
+        <li><strong>3. Graph expansion:</strong> Walk the hypergraph to find connected hyperedges
+          and co-participating entities.</li>
+        <li><strong>4. Evidence retrieval:</strong> Pull the original supporting snippets from the
+          underlying papers.</li>
+        <li><strong>5. Answer construction:</strong> Feed entities, hyperedges, and snippets into
+          an LLM, which composes a natural-language answer grounded in the graph.</li>
+        <li><strong>6. Validation (offline):</strong> Human review of key edges and answers, and
+          weighting by relevance when needed.</li>
+      </ul>
+
+      <h2>Why a knowledge graph + RAG, not just GPT?</h2>
+      <ul>
+        <li><strong>Factual grounding:</strong> GPT-style models can hallucinate; the graph keeps
+          answers anchored to explicit, inspectable evidence.</li>
+        <li><strong>Multi-entity biology:</strong> Real biology involves
+          drug–gene–pathway–condition–nutrient interactions. Hyperedges capture these multi-way
+          relationships directly; binary edges do not.</li>
+        <li><strong>Scale:</strong> Millions of papers and relations are stored structurally rather
+          than “memorized” in model weights.</li>
+        <li><strong>Explainability:</strong> For each answer, you can see which entities and
+          evidence nodes were involved, and how they connect in the graph.</li>
+      </ul>
+
+      <p class="section-note">
+        The demo you see is just the front door into this pipeline: a graph-aware reader over a
+        carefully filtered, scored, and structured biomedical corpus.
+      </p>
+    </main>
+  </div>
+</body>
+</html>

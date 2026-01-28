@@ -1,0 +1,459 @@
+######## Into query_with_file endpoint ########
+
+
+/home/exacloud/gscratch/BDRL/paveethran/anaconda3/envs/hypergraphrag/lib/python3.11/site-packages/docrep/decorators.py:43: SyntaxWarning: 'param_categorical_covariate_keys' is not a valid key!
+  doc = func(self, args[0].__doc__, *args[1:], **kwargs)
+INFO:faiss.loader:Loading faiss with AVX512-SPR support.
+INFO:faiss.loader:Could not load library with AVX512-SPR support due to:
+ModuleNotFoundError("No module named 'faiss.swigfaiss_avx512_spr'")
+INFO:faiss.loader:Loading faiss with AVX512 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX512 support.
+INFO:sentence_transformers.SentenceTransformer:Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+INFO:chromadb.telemetry.product.posthog:Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+INFO:scchatbot.workflow.function_history:✅ Vector database initialized at conversation_history/conversation_vectors
+INFO:chromadb.telemetry.product.posthog:Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+INFO:scchatbot.workflow.function_history:✅ Enrichment vector database initialized at conversation_history/conversation_vectors/enrichment
+INFO:scchatbot.multi_agent_base:⚠️ Warning: .h5ad file isn't given, unable to generate UMAP.
+INFO:scchatbot.multi_agent_base:⚠️ Cannot initialize hierarchical management without adata
+INFO:scchatbot.multi_agent_base:⚠️ Cannot initialize cell type extractor without adata
+✅ EnrichmentChecker: Loaded config from /home/exacloud/gscratch/BDRL/paveethran/gkhg/scChat/media/specification_graph.json
+   Neo4j test: Found 178742 pathways in 'pathways' database
+✅ EnrichmentChecker: Neo4j connection established
+/home/exacloud/gscratch/BDRL/paveethran/anaconda3/envs/hypergraphrag/lib/python3.11/site-packages/torch/cuda/__init__.py:654: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+INFO:sentence_transformers.SentenceTransformer:Use pytorch device_name: cpu
+INFO:sentence_transformers.SentenceTransformer:Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+✅ EnrichmentChecker: Vector search loaded (178742 pathways)
+✅ EnrichmentChecker initialized: connected
+✅ All workflow nodes initialized successfully
+INFO:scchatbot.multi_agent_base:✅ Session state management initialized
+INFO:scchatbot.multi_agent_base:🆕 Creating new session state for '02728a2588c619bb554d183'
+🔄 Orchestrator: Delegating to InputProcessorNode
+INFO:scchatbot.workflow.node_base:🔄 InputProcessor: Starting execution
+INFO:scchatbot.workflow.node_base:   Current message: A file has been uploaded for this session.
+File path: /home/exacloud/gscratch/BDRL/paveethran/gkhg/H...
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:scchatbot.workflow.nodes.input_processing:🔍 LLM search query response: '```json
+["current_session_state"]
+```'
+INFO:scchatbot.workflow.nodes.input_processing:🧠 LLM requested 1 context sources: ['current_session_state']
+INFO:scchatbot.workflow.node_base:🔍 CONTEXT BUILDER: Building session context...
+INFO:scchatbot.workflow.node_base:🔍 CONTEXT BUILDER: Found 0 cell types: []
+INFO:scchatbot.workflow.node_base:🔍 CONTEXT BUILDER: Generated 33 chars, starts with: 'No current session data available...'
+INFO:scchatbot.workflow.nodes.input_processing:✅ Added current session state context (33 chars)
+INFO:scchatbot.workflow.nodes.input_processing:🔍 SESSION CONTEXT DEBUG: First 100 chars: 'No current session data available...'
+INFO:scchatbot.workflow.nodes.input_processing:✅ Added fresh unified context (56 chars)
+INFO:scchatbot.workflow.nodes.input_processing:🔄 Initialized with 0 initial cell types
+INFO:scchatbot.workflow.node_base:✅ InputProcessor: Execution complete
+🔄 Orchestrator: Delegating to PlannerNode
+INFO:scchatbot.workflow.node_base:🔄 Planner: Starting execution
+INFO:scchatbot.workflow.node_base:   Current message: A file has been uploaded for this session.
+File path: /home/exacloud/gscratch/BDRL/paveethran/gkhg/H...
+INFO:scchatbot.workflow.nodes.planning:🧬 PLANNER: Cell type status for planning:
+INFO:scchatbot.workflow.nodes.planning:   • Initial types: 0
+INFO:scchatbot.workflow.nodes.planning:   • Currently available: 0
+INFO:scchatbot.workflow.nodes.planning:   • Discovered this session: 0
+INFO:scchatbot.workflow.nodes.planning:🧬 Planning for question: 'A file has been uploaded for this session.
+File path: /home/exacloud/gscratch/BDRL/paveethran/gkhg/HyperGraphRAG/uploads/02728a2588c619bb554d183__cancer.h5ad
+
+User question:
+What are the upregulated and most downregulated markers in this data? And is it affecting metabolic markers and increase any chances or cancer?
+
+Instructions:
+Use the analysis from the uploaded file as the primary evidence source when relevant. And use this to generate a detailed answer to the user's question. If the file does not contain sufficient or any information, say so explicitly.'
+planning_prompt 
+                You are an intelligent planner for single-cell RNA-seq analysis. 
+                
+                Create a step-by-step execution plan for the user query.
+                
+                CONTEXT:
+                - Currently available cell types (0): 
+                - No failed cell type discoveries
+                - Cell type status: Using initial cell types only
+                - Previous analyses: {}
+                
+                
+                Available functions:
+                - display_dotplot: Display dotplot for the annotated results
+- display_processed_umap: Display UMAP that IS annotated with cell types
+- display_leiden_umap: Display UMAP colored by leiden clusters instead of cell types
+- display_overall_umap: Display comprehensive UMAP plot with global view of the entire dataset
+- perform_enrichment_analyses: Run enrichment analyses on DE genes for a cell type
+- process_cells: Recluster and further annotate cells based on cell type
+- display_enrichment_visualization: PREFERRED: Show comprehensive enrichment visualization with both barplot and dotplot (default), or individual plots
+- dea_split_by_condition: Perform differential expression analysis (DEA) split by condition
+- display_dea_heatmap: Create interactive heatmap visualization from DEA (Differential Expression Analysis) results for a single cell type
+- display_cell_count_comparison: Create stacked or grouped bar chart comparing cell counts across experimental conditions for multiple cell types
+- compare_cell_counts: Compare cell counts between experimental conditions for specific cell type(s)
+- search_enrichment_semantic: Search all enrichment terms semantically to find specific pathways or biological processes regardless of their ranking in top results
+- validate_processing_results: Validate that process_cells discovered expected cell types
+- display_feature_plot: Generate interactive feature plots showing gene expression overlaid on UMAP coordinates
+- display_violin_plot: Generate interactive violin plots showing gene expression distribution across leiden clusters with pre/post treatment comparison
+- display_cell_count_stacked_plot: Generate stacked bar plots comparing cell counts across conditions (pre/post treatment) for multiple cell types
+                
+                User question: "A file has been uploaded for this session.
+File path: /home/exacloud/gscratch/BDRL/paveethran/gkhg/HyperGraphRAG/uploads/02728a2588c619bb554d183__cancer.h5ad
+
+User question:
+What are the upregulated and most downregulated markers in this data? And is it affecting metabolic markers and increase any chances or cancer?
+
+Instructions:
+Use the analysis from the uploaded file as the primary evidence source when relevant. And use this to generate a detailed answer to the user's question. If the file does not contain sufficient or any information, say so explicitly."
+                
+                SEMANTIC DECISION FRAMEWORK:
+                GENE/MARKER ANALYSIS - Use DEA functions when the user asks about:
+                - Gene expression differences between conditions/cell types
+                - Marker genes, differentially expressed genes
+                - Gene-level comparisons and signatures
+                - Examples: "What genes are upregulated in T cells?", "Find marker genes for B cells", "Which genes differ between conditions?"
+                - → Use functions like: dea_split_by_condition, compare_cell_counts
+                
+                PATHWAY ANALYSIS - Use enrichment functions when the user asks about:
+                - Biological pathways, gene sets, functional categories
+                - Pathway enrichment, functional analysis
+                - Systems-level biological processes
+                - Examples: "What pathways are enriched?", "Find interferon pathways", "Analyze GO terms"
+                - → Use functions like: perform_enrichment_analyses
+                
+                CELL TYPE ANALYSIS - Use processing/counting functions when the user asks about:
+                - Cell type abundance, proportions, distributions
+                - Cell type identification and characterization
+                - Cell count comparisons and visualizations
+                - Examples: "How many T cells are there?", "Compare cell type proportions", "Show cell count plots"
+                - → Use functions like: process_cells, compare_cell_counts, display_cell_count_stacked_plot
+                
+                CONVERSATIONAL RESPONSE - For simple queries:
+                - Direct greetings or simple questions
+                - When no analysis is needed
+                - Examples: "Hi", "Hello", "What can you do?"
+                - → Response will be generated by LLM synthesis
+                
+                ANALYSIS SELECTION GUIDE:
+                - Gene/marker questions → DEA analysis
+                - Pathway/functional questions → Enrichment analysis
+                - Cell abundance/counting questions → Cell processing/counting + display_cell_count_stacked_plot
+                - Cell count visualization requests → display_cell_count_stacked_plot (direct visualization)
+                - Explanation/interpretation questions → Conversational response
+                - When unclear, consider what type of biological question is being asked
+
+                CRITICAL CONSTRAINT:
+                - ONLY plan analysis for cell types that exist in the "Currently available cell types" list above
+                - DO NOT plan for cell types that are not in the available list, even if they exist in the knowledge base
+                - If the user asks for a cell type not in the available list, create process_cells steps to discover it first
+                
+                Create a plan in this JSON format:
+                {
+                    "plan_summary": "Brief description of how you'll answer this question",
+                    "visualization_only": true/false,
+                    "steps": [
+                        {
+                            "step_type": "analysis|visualization|conversation",
+                            "function_name": "exact_function_name", 
+                            "parameters": {"param1": "value1"},
+                            "description": "What this step accomplishes",
+                            "expected_outcome": "What we expect to produce",
+                            "target_cell_type": "If applicable, which cell type"
+                        }
+                    ]
+                }
+                
+                IMPORTANT GUIDELINES: 
+                - When analyzing multiple cell types, create separate steps for each cell type
+                - For example, if comparing "T cells" and "B cells", create separate steps:
+                Step 1: analyze T cell, Step 2: analyze B cell, Step 3: compare results
+                - Never put multiple cell types in a single parameter (e.g., don't use "T cells, B cells")
+                - Use exact cell type names (e.g., "T cell", "B cell", not "T cells, B cells")
+                - SKIP steps for unavailable cell types: 
+                - CELL TYPE STRATEGY: If a requested cell type is not in the available list, consider if it needs discovery
+                - AVAILABLE TYPES PRIORITY: Prefer using currently available cell types when possible
+                - CRITICAL STEP ORDER: For DEA heatmaps, ALWAYS put dea_split_by_condition BEFORE display_dea_heatmap for the same cell type
+                - Example: Step 1: dea_split_by_condition(cell_type="T cell"), Step 2: display_dea_heatmap(cell_type="T cell")
+                - Focus on creating a logical flow to answer the user's question
+                
+                VISUALIZATION-ONLY DETECTION:
+                - Set "visualization_only": true if the user ONLY wants to see plots/visualizations
+                - Examples of visualization-only requests:
+                * "Show the GSEA barplot for T cell"
+                * "Display the GO dotplot"
+                * "Plot the enrichment results"
+                * "Generate UMAP visualization"
+                - Set "visualization_only": false for analysis requests or questions needing interpretation:
+                * "What pathways are enriched in T cells?"
+                * "Run GSEA analysis and explain results"
+                * "Compare T cell vs B cell enrichment"
+                
+                ENRICHMENT ANALYSIS GUIDELINES:
+                - For enrichment analysis steps, use MINIMAL parameters - only specify "cell_type"
+                - Do NOT specify "analyses", "gene_set_library", or "pathway_include" parameters
+                - The EnrichmentChecker will automatically determine optimal analysis methods and parameters
+                - Examples:
+                * "Run GSEA analysis on T cells" → {"cell_type": "T cell"} (EnrichmentChecker adds analyses)
+                * "Find pathways enriched in B cells" → {"cell_type": "B cell"} (EnrichmentChecker determines methods)
+                * "Analyze immune pathways" → {"cell_type": "Immune cell"} (EnrichmentChecker handles targeting)
+                
+                VISUALIZATION GUIDELINES:
+                - For enrichment visualization, ALWAYS use "display_enrichment_visualization":
+                * Use "display_enrichment_visualization" for ALL enrichment plots (shows both bar + dot by default)
+                * ALWAYS specify the "analysis" parameter to match what was performed
+                * Use "plot_type" parameter to control visualization: "both" (default), "bar", or "dot"
+                * Examples:
+                    - "show GO plots" → use "display_enrichment_visualization" with "analysis": "go"
+                    - "visualize GSEA results" → use "display_enrichment_visualization" with "analysis": "gsea"  
+                    - "show ONLY barplot" → use "display_enrichment_visualization" with "plot_type": "bar"
+                    - "show ONLY dotplot" → use "display_enrichment_visualization" with "plot_type": "dot"
+                    - "display both plots" → use "display_enrichment_visualization" (default plot_type="both")
+                
+                - For cell count comparison visualization, use "display_cell_count_comparison":
+                * Use AFTER multiple "compare_cell_counts" steps have been executed to show aggregate results
+                * Aggregates results from multiple cell types into a single comparative visualization
+                * Examples:
+                    - After comparing T cell, B cell, Macrophages counts → create visualization step to show all together
+                    - "show cell count comparison" → use "display_cell_count_comparison" with results from previous steps
+                    - "visualize cell abundance across conditions" → use "display_cell_count_comparison"
+                * The "cell_types_data" parameter should contain aggregated results from executed compare_cell_counts steps
+
+                - For cell count stacked bar plot visualization, use "display_cell_count_stacked_plot":
+                * Creates stacked bar plots comparing cell counts across conditions for multiple cell types
+                * Use when user wants to see patient-specific treatment comparisons or cell type abundance changes
+                * Works directly with live data - NO need for prior compare_cell_counts steps
+                * Examples:
+                    - "create stacked bar plot for T cells, B cells, and Macrophages" → use "display_cell_count_stacked_plot" with cell_types=["T cell", "B cell", "Macrophage"]
+                    - "show cell count comparison across patients" → use "display_cell_count_stacked_plot" with relevant cell types
+                    - "plot cell abundance by treatment" → use "display_cell_count_stacked_plot" with cell types of interest
+                    - "compare cell counts in a stacked plot" → use "display_cell_count_stacked_plot"
+                * Parameters: cell_types (required list) - can accept plural forms like "T cells", "B cells"
+                * Automatically extracts patient and treatment information from metadata
+                * Shows cell types on x-axis with stacked bars by patient-treatment combinations
+                
+                - For DEA heatmap visualization, use "display_dea_heatmap":
+                * CRITICAL: Use IMMEDIATELY AFTER "dea_split_by_condition" step for the same cell type
+                * Creates heatmap showing gene expression patterns across conditions for one cell type
+                * CORRECT ORDER Examples:
+                    - Step N: dea_split_by_condition(cell_type="T cell"), Step N+1: display_dea_heatmap(cell_type="T cell") 
+                    - Step N: dea_split_by_condition(cell_type="B cell"), Step N+1: display_dea_heatmap(cell_type="B cell")
+                * NEVER put display_dea_heatmap BEFORE the corresponding dea_split_by_condition
+                * For multiple cell types, create pairs: analysis → heatmap for each cell type
+                * Parameters: cell_type (required), top_n_genes (default: 20), cluster_genes (default: true), cluster_samples (default: true)
+
+                - For gene expression visualization on UMAP, use "display_feature_plot":
+                * Creates interactive scatter plots showing gene expression overlaid on UMAP coordinates
+                * Use when user wants to see WHERE genes are expressed across the cell landscape
+                * Examples:
+                    - "show CD3E expression on UMAP" → use "display_feature_plot" with genes=["CD3E"]
+                    - "visualize T cell markers on the map" → use "display_feature_plot" with genes=["CD3E", "CD4", "CD8A"]
+                    - "plot gene expression patterns" → use "display_feature_plot" with relevant genes
+                * Parameters: genes (required list), cell_type_filter (optional to highlight specific cell types)
+                * Can plot single or multiple genes in subplot layout
+
+                - For gene expression distribution analysis, use "display_violin_plot":
+                * Creates interactive violin plots showing expression across leiden clusters with treatment comparison
+                * Use when user wants to compare gene expression LEVELS across clusters or conditions
+                * Examples:
+                    - "compare IL32 expression across T cell clusters" → use "display_violin_plot" with cell_type="T cell", genes=["IL32"]
+                    - "show treatment differences in gene expression" → use "display_violin_plot" with relevant cell_type and genes
+                    - "violin plot for marker genes" → use "display_violin_plot" with cell_type and marker gene list
+                * Parameters: cell_type (required), genes (required list)
+                * Automatically shows pre/post treatment comparison if available
+                * Uses hierarchical cell type discovery (e.g., Treg → finds T cell data)
+
+                - For UMAP visualization colored by leiden clusters, use "display_leiden_umap":
+                * Creates interactive UMAP plots colored by leiden cluster assignments instead of cell types
+                * Use when user wants to see CLUSTER organization rather than cell type annotation
+                * Examples:
+                    - "show leiden clusters on UMAP" → use "display_leiden_umap" with cell_type for file discovery
+                    - "visualize cluster organization" → use "display_leiden_umap"
+                    - "display UMAP colored by clusters" → use "display_leiden_umap"
+                    - "show T cell leiden clusters" → use "display_leiden_umap" with cell_type="T cell"
+                * Parameters: cell_type (required for hierarchical file discovery)
+                * Uses same intelligent file discovery as other UMAP functions
+                * Colors points by leiden cluster numbers with Seurat discrete palette
+
+                - For comprehensive global UMAP visualization, use "display_overall_umap":
+                * Creates UMAP plot with complete dataset view showing entire cellular landscape
+                * Use when user wants to see the GLOBAL perspective or complete dataset overview
+                * Two color modes: biological (cell types) or computational (consolidated leiden clusters)
+                * Examples:
+                    - "show overall UMAP" → use "display_overall_umap" with color_mode="cell_type"
+                    - "display global cell landscape" → use "display_overall_umap" with color_mode="cell_type"
+                    - "show consolidated leiden clusters" → use "display_overall_umap" with color_mode="accumulative_leiden"
+                    - "global clustering view" → use "display_overall_umap" with color_mode="accumulative_leiden"
+                    - "complete cellular overview" → use "display_overall_umap"
+                * Parameters: color_mode (optional, defaults to "cell_type")
+                * Always uses complete dataset for comprehensive view
+                * Consolidates cell types into unified clusters when using accumulative_leiden mode
+
+                SEMANTIC SEARCH GUIDELINES:
+                - For questions seeking specific pathway/term information beyond the top-ranked results, consider using "search_enrichment_semantic"
+                - Use semantic search when:
+                * User asks about specific pathways that might not be in top results (e.g., "cell cycle regulation", "apoptosis pathways")
+                * User references conversation context about previous analyses and wants to explore related pathways
+                * User wants to find terms similar to those mentioned in conversation context
+                - Parameters for search_enrichment_semantic:
+                * "query": the pathway/term to search for (e.g., "cell cycle regulation")
+                * "cell_type": target cell type (can be inferred from conversation context if not explicitly mentioned)
+                * Optional: "analysis_type", "condition", "limit"
+                - Examples:
+                * "Show me cell cycle related terms from the T cell analysis" → search_enrichment_semantic with query="cell cycle" and cell_type="T cell"
+                * "Are there any apoptosis pathways in our results?" → search_enrichment_semantic with query="apoptosis"
+                * "Find pathways similar to what we discussed earlier" → use conversation context to determine relevant search terms
+                
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:scchatbot.workflow.nodes.planning:🔍 Cell discovery: No hierarchy manager available
+INFO:scchatbot.workflow.nodes.planning:🔍 ENRICHMENT DEBUG: Found 1 enrichment steps
+INFO:scchatbot.workflow.nodes.planning:🔍 PATHWAY EXTRACTOR: Processing 4 steps
+INFO:scchatbot.workflow.nodes.planning:🔍 PATHWAY EXTRACTOR: Extracting keywords for step 3: unknown
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:scchatbot.workflow.nodes.planning:🧠 LLM enrichment analysis: '"EXPLICIT_METHOD:marker_analysis"'
+INFO:scchatbot.workflow.nodes.planning:🧠 LLM result after cleaning: 'EXPLICIT_METHOD:marker_analysis'
+INFO:scchatbot.workflow.nodes.planning:🎯 Explicit method request detected: ['marker_analysis']
+✅ EnrichmentChecker: Enhanced explicit analysis plan for unknown
+INFO:scchatbot.workflow.nodes.planning:✅ Planner created execution plan with 4 steps
+INFO:scchatbot.workflow.nodes.planning:   • 0 process_cells steps
+INFO:scchatbot.workflow.nodes.planning:   • 0 validation steps
+INFO:scchatbot.workflow.nodes.planning:   • 2 analysis steps
+INFO:scchatbot.workflow.node_base:✅ Planner: Execution complete
+INFO:scchatbot.workflow.nodes.planning:FINAL PLAN : 
+🔄 Orchestrator: Delegating to ExecutorNode
+INFO:scchatbot.workflow.node_base:🔄 Executor: Starting execution
+INFO:scchatbot.workflow.node_base:   Current message: A file has been uploaded for this session.
+File path: /home/exacloud/gscratch/BDRL/paveethran/gkhg/H...
+INFO:scchatbot.workflow.nodes.execution:🔄 Executing step 1: Perform differential expression analysis to identify upregulated and downregulated genes in the dataset.
+INFO:scchatbot.workflow.nodes.execution:🔍 STORAGE DEBUG: Original function_name from plan: 'dea_split_by_condition'
+INFO:scchatbot.workflow.nodes.execution:❌ Step 1 failed: dea_split_by_condition() got an unexpected keyword argument 'file_path'
+INFO:scchatbot.workflow.nodes.execution:📄 Text storage: dea_split_by_condition - Truncated to 500 chars
+INFO:scchatbot.workflow.nodes.execution:❌ Step failed: dea_split_by_condition() got an unexpected keyword argument 'file_path'
+INFO:scchatbot.workflow.nodes.execution:📝 Recording error and advancing to step 2 (no retries for deterministic operations)
+INFO:scchatbot.workflow.nodes.execution:🎨 Continuing execution - visualization for same cell type: None
+INFO:scchatbot.workflow.nodes.execution:🔄 Executing step 2: Visualize the differential expression results using a heatmap to highlight the most upregulated and downregulated genes.
+INFO:scchatbot.workflow.nodes.execution:🔍 STORAGE DEBUG: Original function_name from plan: 'display_dea_heatmap'
+INFO:scchatbot.multi_agent_base:🔍 VIZ WRAPPER DEBUG: display_dea_heatmap called with kwargs: {'file_path': '/home/exacloud/gscratch/BDRL/paveethran/gkhg/HyperGraphRAG/uploads/02728a2588c619bb554d183__cancer.h5ad', 'top_n_genes': 20, 'cluster_genes': True, 'cluster_samples': True}
+INFO:scchatbot.multi_agent_base:❌ Visualization error: display_dea_heatmap() got an unexpected keyword argument 'file_path'
+INFO:scchatbot.workflow.nodes.execution:✅ Step 2 completed successfully
+INFO:scchatbot.workflow.nodes.execution:🎨 Visualization storage: display_dea_heatmap - HTML preserved
+INFO:scchatbot.workflow.nodes.execution:🔄 Advanced to step 3
+INFO:scchatbot.workflow.nodes.execution:🛑 Stopping execution after 2 steps
+INFO:scchatbot.workflow.node_base:✅ Executor: Execution complete
+🔄 Orchestrator: Delegating to EvaluatorNode
+INFO:scchatbot.workflow.nodes.evaluation:🔄 Steps still remaining (2/4), skipping critic analysis
+🔄 Orchestrator: Delegating to ExecutorNode
+INFO:scchatbot.workflow.node_base:🔄 Executor: Starting execution
+INFO:scchatbot.workflow.node_base:   Current message: A file has been uploaded for this session.
+File path: /home/exacloud/gscratch/BDRL/paveethran/gkhg/H...
+INFO:scchatbot.workflow.nodes.execution:🔄 Executing step 3: Perform MARKER_ANALYSIS enrichment analysis on unknown.
+INFO:scchatbot.workflow.nodes.execution:🔍 STORAGE DEBUG: Original function_name from plan: 'perform_enrichment_analyses'
+INFO:scchatbot.workflow.nodes.execution:❌ Step 3 failed: perform_enrichment_analyses() got an unexpected keyword argument 'file_path'
+INFO:scchatbot.workflow.nodes.execution:📄 Text storage: perform_enrichment_analyses - Truncated to 500 chars
+INFO:scchatbot.workflow.nodes.execution:❌ Step failed: perform_enrichment_analyses() got an unexpected keyword argument 'file_path'
+INFO:scchatbot.workflow.nodes.execution:📝 Recording error and advancing to step 4 (no retries for deterministic operations)
+INFO:scchatbot.workflow.nodes.execution:🎨 Continuing execution - visualization for same cell type: None
+INFO:scchatbot.workflow.nodes.execution:🔄 Executing step 4: Visualize the enrichment analysis results using bar and dot plots to highlight significant pathways.
+INFO:scchatbot.workflow.nodes.execution:🔍 STORAGE DEBUG: Original function_name from plan: 'display_enrichment_visualization'
+INFO:scchatbot.workflow.nodes.execution:🔍 STEP DEBUG: Calling visualization function 'display_enrichment_visualization' with step parameters: {'analysis': 'enrichment', 'plot_type': 'both'}
+INFO:scchatbot.workflow.nodes.execution:❌ No successful enrichment enrichment analysis found to visualize
+INFO:scchatbot.workflow.nodes.execution:❌ Step execution blocked: No enrichment enrichment analysis results available to visualize
+INFO:scchatbot.workflow.nodes.execution:📄 Text storage: display_enrichment_visualization - Truncated to 500 chars
+INFO:scchatbot.workflow.nodes.execution:❌ Step failed: No enrichment enrichment analysis results available to visualize
+INFO:scchatbot.workflow.nodes.execution:📝 Recording error and advancing to step 5 (no retries for deterministic operations)
+INFO:scchatbot.workflow.nodes.execution:🛑 Stopping execution after 2 steps
+INFO:scchatbot.workflow.node_base:✅ Executor: Execution complete
+🔄 Orchestrator: Delegating to EvaluatorNode
+INFO:scchatbot.workflow.nodes.evaluation:🎯 All steps complete (4/4), running critic analysis
+INFO:scchatbot.workflow.nodes.evaluation:🏁 Evaluator: Starting sophisticated critic analysis...
+INFO:scchatbot.workflow.nodes.evaluation:🔍 Starting critic analysis...
+INFO:scchatbot.workflow.nodes.evaluation:📋 Question mentioned types: []
+INFO:scchatbot.workflow.nodes.evaluation:🧬 Discovered types: []
+INFO:scchatbot.workflow.nodes.evaluation:🎯 Critic will analyze semantically relevant types: []
+INFO:scchatbot.workflow.nodes.evaluation:🚫 Unavailable types: []
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:scchatbot.workflow.nodes.evaluation:📊 Question classified as: gene_markers
+INFO:scchatbot.workflow.nodes.evaluation:📋 No specific cell types mentioned, skipping critic analysis
+INFO:scchatbot.workflow.nodes.evaluation:✅ Execution Summary:
+INFO:scchatbot.workflow.nodes.evaluation:   • Total steps executed: 4
+INFO:scchatbot.workflow.nodes.evaluation:   • Successful: 1
+INFO:scchatbot.workflow.nodes.evaluation:   • Failed: 3
+INFO:scchatbot.workflow.nodes.evaluation:   • Supplementary steps generated: 0
+INFO:scchatbot.workflow.nodes.evaluation:🎯 Evaluator: Critic analysis complete, ready for response generation
+🔄 Orchestrator: Delegating to EvaluatorNode
+INFO:scchatbot.workflow.nodes.evaluation:🎯 All steps complete (4/4), running critic analysis
+INFO:scchatbot.workflow.nodes.evaluation:🏁 Evaluator: Starting sophisticated critic analysis...
+INFO:scchatbot.workflow.nodes.evaluation:🔍 Starting critic analysis...
+INFO:scchatbot.workflow.nodes.evaluation:📋 Question mentioned types: []
+INFO:scchatbot.workflow.nodes.evaluation:🧬 Discovered types: []
+INFO:scchatbot.workflow.nodes.evaluation:🎯 Critic will analyze semantically relevant types: []
+INFO:scchatbot.workflow.nodes.evaluation:🚫 Unavailable types: []
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:scchatbot.workflow.nodes.evaluation:📊 Question classified as: gene_markers
+INFO:scchatbot.workflow.nodes.evaluation:📋 No specific cell types mentioned, skipping critic analysis
+INFO:scchatbot.workflow.nodes.evaluation:✅ Execution Summary:
+INFO:scchatbot.workflow.nodes.evaluation:   • Total steps executed: 4
+INFO:scchatbot.workflow.nodes.evaluation:   • Successful: 1
+INFO:scchatbot.workflow.nodes.evaluation:   • Failed: 3
+INFO:scchatbot.workflow.nodes.evaluation:   • Supplementary steps generated: 0
+INFO:scchatbot.workflow.nodes.evaluation:🎯 Evaluator: Critic analysis complete, ready for response generation
+INFO:scchatbot.multi_agent_base:🔄 Routing: Critic analysis complete, generating response
+🔄 Orchestrator: Delegating to ResponseGeneratorNode
+INFO:scchatbot.workflow.nodes.response:🎯 UNIFIED: Generating LLM-synthesized response with conversation awareness...
+INFO:scchatbot.workflow.unified_result_accessor:🔍 UNIFIED ACCESSOR: Processing 4 execution steps
+INFO:scchatbot.workflow.unified_result_accessor:🔍 Step 2: display_dea_heatmap for step_1
+INFO:scchatbot.workflow.unified_result_accessor:🎨 VISUALIZATION DEBUG: Step 2 function: display_dea_heatmap
+INFO:scchatbot.workflow.unified_result_accessor:🎨 VISUALIZATION DEBUG: Parameters: {'file_path': '/home/exacloud/gscratch/BDRL/paveethran/gkhg/HyperGraphRAG/uploads/02728a2588c619bb554d183__cancer.h5ad', 'top_n_genes': 20, 'cluster_genes': True, 'cluster_samples': True}
+INFO:scchatbot.workflow.unified_result_accessor:✅ Handling display_dea_heatmap with VisualizationResultAccessor
+INFO:scchatbot.workflow.unified_result_accessor:✅ UNIFIED ACCESSOR: Processed 1 successful steps
+INFO:scchatbot.workflow.unified_result_accessor:🎯 UNIFIED FORMATTER: Generated 251 characters for synthesis
+INFO:scchatbot.workflow.nodes.response:✅ Unified results extracted and formatted successfully
+INFO:scchatbot.workflow.nodes.response:✅ Failed analyses retrieved
+INFO:scchatbot.workflow.nodes.response:🎯 UNIFIED: Found context message (56 chars)
+INFO:scchatbot.workflow.nodes.response:✅ Conversation context processed
+INFO:scchatbot.workflow.nodes.response:✅ Discovery search completed
+INFO:scchatbot.workflow.nodes.response:✅ Synthesis prompt created with relevance hints
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:scchatbot.workflow.nodes.response:🎨 PLOT EXTRACTION: Checking 4 execution steps
+INFO:scchatbot.workflow.nodes.response:🎨 PLOT EXTRACTION: Step 1: dea_split_by_condition, success=False, has_result=True
+INFO:scchatbot.workflow.nodes.response:🎨 PLOT EXTRACTION: Step 2: display_dea_heatmap, success=True, has_result=True
+INFO:scchatbot.workflow.nodes.response:🎨 PLOT EXTRACTION: Added plot plot_1: Dea Heatmap (90 chars)
+INFO:scchatbot.workflow.nodes.response:🎨 PLOT EXTRACTION: Step 3: perform_enrichment_analyses, success=False, has_result=True
+INFO:scchatbot.workflow.nodes.response:🎨 PLOT EXTRACTION: Step 4: display_enrichment_visualization, success=False, has_result=True
+INFO:scchatbot.workflow.nodes.response:🎨 PLOT EXTRACTION: Successfully extracted 1 individual plots (total: 90 chars)
+INFO:scchatbot.workflow.nodes.response:🎨 SIZE VALIDATION: Validated 1 plots, total size: 90 bytes
+INFO:scchatbot.workflow.nodes.response:🎯 ResponseGeneratorNode: Found 1 individual plots
+INFO:scchatbot.workflow.nodes.response:🎨 Creating multiple messages structure: 1 plots + 1 text (plots first)
+INFO:scchatbot.workflow.nodes.response:🎨 Created multiple messages structure with 2 total messages (plots first, then text)
+INFO:scchatbot.workflow.nodes.response:🎯 UNIFIED: Generated response (1812 chars)
+INFO:scchatbot.multi_agent_base:✅ Conversation recorded in vector database
+INFO:scchatbot.multi_agent_base:💾 Session state saved for '02728a2588c619bb554d183' with 0 available cell types
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:hypergraphrag:kw_prompt result:
+("hyper-relation"<|>"What are the upregulated and most downregulated markers in this data? And is it affecting metabolic markers and increase any chances or cancer?"<|>5)##
+("entity"<|>"upregulated markers"<|>"concept"<|>"Upregulated markers are typically associated with genes that show increased expression in cancer datasets, often including oncogenes or genes involved in cell proliferation."<|>90)##
+("entity"<|>"downregulated markers"<|>"concept"<|>"Downregulated markers are typically associated with genes that show decreased expression in cancer datasets, often including tumor suppressor genes."<|>90)##
+("hyper-relation"<|>"The analysis of the uploaded file `/home/exacloud/gscratch/BDRL/paveethran/gkhg/HyperGraphRAG/uploads/02728a2588c619bb554d183__cancer.h5ad` has provided a heatmap visualization of differentially expressed genes (DEGs)."<|>8)##
+("entity"<|>"heatmap visualization"<|>"object"<|>"The heatmap visualization represents differentially expressed genes based on the analysis of the uploaded cancer dataset."<|>85)##
+("entity"<|>"differentially expressed genes (DEGs)"<|>"concept"<|>"DEGs are genes that show significant differences in expression levels between cancerous and normal states, indicating their potential role in cancer biology."<|>90)##
+("hyper-relation"<|>"Regarding metabolic markers, cancer cells often exhibit altered metabolism, known as the Warburg effect, where they rely more on glycolysis even in the presence of oxygen."<|>9)##
+("entity"<|>"metabolism"<|>"concept"<|>"Metabolism in cancer cells is often altered; they may rely more on glycolysis due to the Warburg effect."<|>90)##
+("entity"<|>"Warburg effect"<|>"concept"<|>"The Warburg effect is a phenomenon where cancer cells preferentially use glycolysis for energy production even when oxygen is available."<|>90)##
+("entity"<|>"glycolysis"<|>"process"<|>"Glycolysis is a metabolic pathway that is often upregulated in cancer cells, allowing them to convert glucose into energy quickly."<|>85)##
+("hyper-relation"<|>"Without specific enrichment analysis results, it’s challenging to definitively state if metabolic pathways are affected in this dataset."<|>6)##
+("hyper-relation"<|>"If genes involved in glycolysis, the TCA cycle, or other metabolic pathways are among the DEGs, it could suggest metabolic reprogramming, which is a hallmark of cancer."<|>9)##
+("entity"<|>"TCA cycle"<|>"process"<|>"The TCA cycle is a key metabolic pathway that might be affected in cancer cells, affecting their energy production and biosynthesis."<|>85)##
+("hyper-relation"<|>"To determine if these changes increase cancer risk or progression, we would typically look for upregulation of genes involved in cell cycle progression, DNA replication, and anti-apoptotic pathways, alongside downregulation of genes involved in apoptosis and cell cycle arrest."<|>9)##
+("entity"<|>"cell cycle progression"<|>"concept"<|>"Cell cycle progression involves the processes that lead to cell division; genes regulating this may be upregulated in cancer."<|>90)##
+("entity"<|>"DNA replication"<|>"process"<|>"DNA replication is a critical process that must be regulated accurately to ensure proper cell division; its dysregulation can lead to cancer."<|>90)##
+("entity"<|>"anti-apoptotic pathways"<|>"concept"<|>"Anti-apoptotic pathways help prevent programmed cell death; their upregulation can contribute to cancer cell survival."<|>90)##
+("entity"<|>"apoptosis"<|>"process"<|>"Apoptosis is a form of programmed cell death; its downregulation is often observed in cancer cells, allowing them to survive longer."<|>90)##
+("entity"<|>"cell cycle arrest"<|>"concept"<|>"Cell cycle arrest is a mechanism to stop the cell cycle, often downregulated in cancer to allow uncontrolled proliferation."<|>90)##
+("hyper-relation"<|>"If you can provide specific gene lists or additional context from the heatmap visualization, I could offer more detailed insights."<|>5)##
+("hyper-relation"<|>"Alternatively, re-running the failed enrichment analyses could provide a clearer picture of the affected pathways."<|>6)##  
+<|COMPLETE|>
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+INFO:hypergraphrag:Local query uses 60 entites, 73 relations, 3 text units
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+INFO:hypergraphrag:Global query uses 142 entites, 60 relations, 3 text units
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:46268 - "POST /api/query_with_file HTTP/1.1" 200 OK
+^CINFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2159179]
+INFO:     Stopping reloader process [2120780]

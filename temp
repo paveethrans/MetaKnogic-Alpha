@@ -1,0 +1,48 @@
+"entity"<|>"DNA/histone demethylases"<|>"enzyme"<|>"DNA/histone demethylases are enzymes that remove methyl groups, and their activity can be influenced by the presence of 2-hydroxyglutarate."<|>85)##
+("entity"<|>"cellular metabolism"<|>"process"<|>"Cellular metabolism encompasses all biochemical reactions within cells, potentially altered in the context of 2-HG."<|>85)##
+("hyper-relation"<|>"And any correlations between 2-HG levels and tumor grade, prognosis, or treatment response."<|>8)##
+("entity"<|>"tumor grade"<|>"concept"<|>"Tumor grade describes the severity of a tumor, which may correlate with levels of 2-hydroxyglutarate."<|>85)##
+("entity"<|>"prognosis"<|>"concept"<|>"Prognosis refers to the likely outcome of a disease, which can be influenced by 2-hydroxyglutarate levels."<|>85)##
+("entity"<|>"treatment response"<|>"concept"<|>"Treatment response indicates how well a tumor responds to therapy, potentially related to 2-hydroxyglutarate levels."<|>85)##
+("hyper-relation"<|>"Here is the metabolite context, this is extracted from our well-curated database."<|>7)##
+("entity"<|>"metabolite context"<|>"data"<|>"The metabolite context contains curated information relevant to the current query about 2-hydroxyglutarate and gliomas."<|>85)##
+("hyper-relation"<|>"Seeds used: ['IDH1', 'C00001_e', 'C00001_l', 'C00001_c', ...]."<|>7)##
+("entity"<|>"IDH1"<|>"gene"<|>"IDH1 is a gene involved in the conversion of isocitrate to alpha-ketoglutarate, relevant in glioma biology."<|>80)##
+("entity"<|>"C00001_e"<|>"metabolite"<|>"C00001_e is a specific metabolite involved in the metabolic pathways related to gliomas."<|>80)##
+("entity"<|>"C00001_l"<|>"metabolite"<|>"C00001_l is a specific metabolite that plays a role in metabolic processes pertinent to gliomas."<|>80)##
+("entity"<|>"C00001_c"<|>"metabolite"<|>"C00001_c is a specific metabolite involved in cellular processes related to gliomas."<|>80)##
+("entity"<|>"C00002_c"<|>"metabolite"<|>"C00002_c is a metabolite involved in cellular metabolism that may be impacted by glioma progression."<|>80)##
+("entity"<|>"C00002_m"<|>"metabolite"<|>"C00002_m is a metabolite relevant to the metabolic network surrounding glioma development."<|>80)##
+("entity"<|>"C00002_n"<|>"metabolite"<|>"C00002_n is a metabolite that may have implications for glioma progression and development."<|>80)##
+("entity"<|>"C00002_r"<|>"metabolite"<|>"C00002_r is a metabolite that may be involved in glial cell metabolism related to glioma."<|>80)##
+("entity"<|>"C00003_c"<|>"metabolite"<|>"C00003_c is a metabolite interacting in the networks that involve glioma development."<|>80)##
+("entity"<|>"subgraph size"<|>"concept"<|>"The subgraph size indicates the number of nodes analyzed in the metabolic network relevant to gliomas."<|>80)##
+("entity"<|>"reactions"<|>"concept"<|>"The reactions shown indicate the biochemical interactions within the metabolic context of gliomas."<|>80)##
+("entity"<|>"compartments"<|>"concept"<|>"Compartments refer to the areas within the cellular context where biochemical processes occur, relevant to glioma metabolism."<|>80)##
+("hyper-relation"<|>"Top reactions (respect directionality and compartments)."<|>8)##
+("entity"<|>"BDRL_M_2358"<|>"reaction"<|>"BDRL_M_2358 is a reaction involved in the metabolic processes pertinent to gliomas."<|>85)##
+("entity"<|>"C02189_r"<|>"metabolite"<|>"C02189_r is a specific intermediate in a reaction relevant to glioma biochemical pathways."<|>80)##
+("entity"<|>"C19802_r"<|>"metabolite"<|>"C19802_r is a specific intermediate in a reaction that may impact glioma progression."<|>80)##
+("entity"<|>"C00015_r"<|>"metabolite"<|>"C00015_r is a product of a reaction within the context of glioma metabolism."<|>80)##
+("entity"<|>"BDRL_M_102"<|>"reaction"<|>"BDRL_M_102 is a reaction linked to the cellular metabolism pathways associated with gliomas."<|>85)##
+("entity"<|>"C00041_c"<|>"metabolite"<|>"C00041_c is a metabolite relevant to the reactions linked to glioma progression."<|>80)##
+("entity"<|>"C00022_c"<|>"metabolite"<|>"C00022_c is involved in the reactions that affect glioma metabolism."<|>80)##
+("entity"<|>"BDRL_M_2593"<|>"reaction"<|>"BDRL_M_2593 is a reaction that represents metabolic interactions related to gliomas."<|>85)##
+("entity"<|>"C00027_c"<|>"metabolite"<|>"C00027_c is a substrate in a reaction relevant to glioma metabolism."<|>80)##
+("entity"<|>"BDRL_M_2202"<|>"reaction"<|>"BDRL_M_2202 involves genes associated with pathways impacted by 2-HG in gliomas."<|>85)##
+("entity"<|>"UGT1A10"<|>"gene"<|>"UGT1A10 is a gene involved in a reaction that may affect glioma development due to its metabolic interactions."<|>80)##
+("entity"<|>"UGT2B11"<|>"gene"<|>"UGT2B11 is a gene with relevance to the metabolic pathways concerning gliomas."<|>80)##
+("entity"<|>"UGT2B4"<|>"gene"<|>"UGT2B4 is a gene involved in the metabolic network associated with glioma development."<|>80)##
+("entity"<|>"BDRL_M_71"<|>"reaction"<|>"BDRL_M_71 is a metabolic reaction significant to glioma pathways."<|>85)##
+("entity"<|>"BDRL_M_77"<|>"reaction"<|>"BDRL_M_77 is another significant reaction in the metabolic landscape of gliomas."<|>85)##
+("entity"<|>"BDRL_M_2193"<|>"reaction"<|>"BDRL_M_2193 is a reaction involving genes that may influence glioma development."<|>85)##
+("entity"<|>"NAT1"<|>"gene"<|>"NAT1 is a gene relevant to metabolic processes impacting gliomas."<|>80)##
+("entity"<|>"BDRL_M_15"<|>"reaction"<|>"BDRL_M_15 contributes to the understanding of metabolic reactions in gliomas."<|>85)##
+("entity"<|>"C00355_c"<|>"metabolite"<|>"C00355_c is a metabolite involved in the metabolic pathway relevant to gliomas."<|>80)##
+("entity"<|>"C00822_c"<|>"metabolite"<|>"C00822_c is a product in the metabolic context regarding gliomas."<|>80)##
+("entity"<|>"BDRL_M_638"<|>"reaction"<|>"BDRL_M_638 involves genes that could play a role in glioma metabolism."<|>85)##
+("entity"<|>"ALOX15B"<|>"gene"<|>"ALOX15B is a gene involved in the regulation of metabolic processes that may impact gliomas."<|>80)##
+("entity"<|>"BDRL_M_1058"<|>"reaction"<|>"BDRL_M_1058 is relevant in the context of cellular metabolism related to gliomas."<|>85)##
+("entity"<|>"SLC27A2"<|>"gene"<|>"SLC27A2 is a gene linked to metabolic interactions that may impact glioma progression."<|>80)##
+("entity"<|>"BDRL_M_1279"<|>"reaction"<|>"BDRL_M_1279 represents a significant reaction within glioma metabolism."<|>85)##
+("entity"<|>"BDRL_M_1250"<|>"reaction"<|>"BDRL_M_1250 is a key reaction within the glioma metabolic framework."<|>85)##
